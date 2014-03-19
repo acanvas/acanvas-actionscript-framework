@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Asset Includer" default="include_assets">
+	<property file="config/global.properties" />
+	<taskdef resource="net/sf/antcontrib/antlib.xml"/> 
+	<taskdef name="fileutil" classname="ise.antelope.tasks.FileUtilTask"/>
+		
+	<target name="include_assets">
+		<echo>I will now scan all *.png files in folder "source/flash/resources/images"</echo>
+		<echo>I will put the references into file "${global.dir.rockdot}/config/ant/include-assets/Assets.as"</echo>
+		
+		<copy file="${global.dir.rockdot}/config/ant/include-assets/Assets.as" todir="source/flash/src/com/rockdot/project/model/" overwrite="true"/>
+		<for param="file">
+		  <path>
+		    <fileset dir="source/flash/resources/images" includes="*.png, *.jpg"/>
+		  </path>
+		  <sequential>
+		    <propertyregex override="yes"
+		      property="imagefullname"  input="@{file}"
+		      regexp=".*/([^\.]*)" replace="\1"/>
+
+		  	<propertyregex override="yes"
+		      property="imagename"  input="@{file}"
+		      regexp=".*/([^\.]*)\.(png|jpg)" replace="\1"/>
+		  	
+		  	<var name="compression" unset="true"/>
+		  	        
+		  	<if>
+  				<contains string="@{file}" substring=".jpg" />
+  				<then>
+  					<property name="compression" value="" />
+  				</then>
+  				<else>
+  					<property name="compression" value="" />
+					<!--
+					YOU CAN ENABLE PNG COMPRESSION WITH THE OLD FLEX COMPILER
+  					<property name="compression" value=", compression=true, quality=90" />
+  					-->
+  				</else>
+  			</if>
+		  	
+		  	<fileutil file="@{file}" property="date">
+  	            <lastmodified format="EEE, d MMM yyyy HH:mm:ss"/>
+  	        </fileutil>
+		      
+		     <replace file="source/flash/src/com/rockdot/project/model/Assets.as">
+		       <replacetoken><![CDATA[/* REPLACE */]]></replacetoken>
+			  <replacevalue><![CDATA[
+			  	
+		  		/* last import: @{file} */
+		  		/* last modified: @date@ */
+		  		[Embed(source="/../resources/images/@imagefullname@" @compression@)]
+				private static var @imagename@_class:Class;
+				public static function get @imagename@() : Bitmap {
+				  	var r : Bitmap = new @imagename@_class();
+	  				r.pixelSnapping = PixelSnapping.ALWAYS;
+	  				r.smoothing = true;
+	  				return r;
+				}
+			  	
+				/* REPLACE */]]></replacevalue>
+		      </replace>
+		     <replace token="@imagefullname@" value="${imagefullname}" file="source/flash/src/com/rockdot/project/model/Assets.as"/>
+		     <replace token="@imagename@" value="${imagename}" file="source/flash/src/com/rockdot/project/model/Assets.as"/>
+		     <replace token="@date@" value="${date}" file="source/flash/src/com/rockdot/project/model/Assets.as"/>
+		     <replace token="@compression@" value="${compression}" file="source/flash/src/com/rockdot/project/model/Assets.as"/>
+		
+		  </sequential>
+		</for>
+	</target>
+	
+
+</project>

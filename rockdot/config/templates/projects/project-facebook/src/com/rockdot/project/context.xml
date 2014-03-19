@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<objects xmlns="http://www.springactionscript.org/schema/objects"
+		 xmlns:rockdot="http://www.sounddesignz.com/schema/rockdot"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.springactionscript.org/schema/objects http://www.sounddesignz.com/schema/spring/spring-actionscript-objects-2.0.xsd  
+					http://www.sounddesignz.com/schema/rockdot http://www.sounddesignz.com/schema/rockdot/spring-actionscript-rockdot-2.0.xsd">
+<!--
+		##########################################################################################
+		 Application Context // context-displaylist.xml
+		##########################################################################################
+	-->
+	<property file="@project.appversion@/@@language@@.properties" />
+	
+	<!-- UI Plugin -->
+	<object id="plugin_ui" class="com.rockdot.plugin.screen.ScreenDisplaylistPlugin" scope="singleton"></object>
+	
+	<!-- Screen Transition Effects -->
+	<rockdot:transition id="transition.default" class="com.rockdot.library.view.effect.HLeftSwipeTransition" duration="0.5" initialAlpha="0" type="UIConstants.TRANSITION_PARALLEL"/>
+	<rockdot:transition id="transition.default.modal" class="com.rockdot.library.view.effect.PopupTransition" duration="0.3" type="UIConstants.TRANSITION_SEQUENTIAL"/>
+	
+	<!-- Screens -->
+	<rockdot:screen id="layer.prelogin"
+		tree_order="1" 
+		tree_parent="2" 
+		transition="transition.default.modal" 
+		type="StateConstants.SUB_MODAL" 
+		class="com.rockdot.project.view.layer.PreLogin" >
+	</rockdot:screen>
+
+	<rockdot:screen id="layer.loading"
+		tree_order="1" 
+		tree_parent="2" 
+		transition="transition.default.modal" 
+		type="StateConstants.SUB_MODAL" 
+		class="com.rockdot.project.view.layer.Loading" >
+	</rockdot:screen>
+
+	<rockdot:screen id="screen.home"
+		tree_order="1" 
+		tree_parent="1" 
+		transition="transition.default" 
+		class="com.rockdot.project.view.screen.Home" >
+	</rockdot:screen>
+
+	<rockdot:screen id="screen.test"
+		tree_order="1" 
+		tree_parent="1" 
+		transition="transition.default" 
+		class="com.rockdot.project.view.screen.Test" >
+	</rockdot:screen>
+	
+	<rockdot:screen id="screen.import.facebook.album"
+		tree_order="1" 
+		tree_parent="2" 
+		transition="transition.default" 
+		class="com.rockdot.project.view.screen.FBAlbumList" >
+	</rockdot:screen>
+
+	<rockdot:screen id="screen.import.facebook.photo"
+		tree_order="1" 
+		tree_parent="2" 
+		transition="transition.default"
+		class="com.rockdot.project.view.screen.FBPhotoList" >
+	</rockdot:screen>
+	
+
+</objects>

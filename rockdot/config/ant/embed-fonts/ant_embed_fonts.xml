@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Font Embedder" default="embed_fonts">
+	<property file="config/global.properties" />
+	<taskdef resource="net/sf/antcontrib/antlib.xml" />
+	<taskdef name="fileutil" classname="ise.antelope.tasks.FileUtilTask" />
+
+	<target name="docs">
+		<echo>
+			The fontswf utility is a simple command line tool that converts a single font face from a font file into a SWF file. This SWF file can be used as the source of an embedded font in your applications. Supported font file types are *.ttf, *.otf, *.ttc, and *.dfont.
+			Documentation: http://help.adobe.com/en_US/flex/using/WS2db454920e96a9e51e63e3d11c0bf69084-7f5f.html
+				
+			IMPORTANT NOTE I: In some cases, no SWF is generated, for example with some W1G OTF fonts.
+			IMPORTANT NOTE II: If you use DFONT containers, only regular will be compiled into the SWF. Meh.
+				
+			TODO: fondu unpack for dfonts - fondu [-force] [-inquire] [-show] [-latin1] [-afm] [-trackps] macfile(s)
+				http://fondu.sourceforge.net/index.html
+			
+			W1G Fonts:
+			see http://www.linotype.com/5801/europeanopentypecharactersetw1g.html
+			
+			CE = W1G without CYR
+			CYR = Cyrillic only
+			see http://fonts.gestalten.com/faq#a06
+				
+		</echo>
+	</target>
+	<target name="embed_fonts">
+		<echo>I will now scan all Font files in folder "source/flash/resources/fonts".</echo>
+		<echo>I will compile them into SWFs in the same folder.</echo>
+
+		<for param="file">
+			<path>
+				<fileset dir="source/flash/resources/fonts" includes="*.ttc, *.otf, *.ttf, *.dfont" />
+			</path>
+			<sequential>
+				<propertyregex override="yes" property="fontfilename" input="@{file}" regexp=".*/([^\.]*)\.(ttc|otf|ttf|dfont)" replace="\1" />
+
+				<exec executable="${flash.fontswf}" dir="." failonerror="true">
+					<arg line="-3" />
+					<arg line="-alias '${fontfilename}'" />
+					<arg line="-unicode-range *" />
+					<arg line="-output source/flash/resources/fonts/${fontfilename}.swf" />
+					<arg line="@{file}" />
+				</exec>
+			</sequential>
+		</for>
+	</target>
+	<target name="embed_test" >
+		<exec executable="${flash.fontswf}" dir="." failonerror="true">
+			<arg line="-3" />
+			<arg line="-b" />
+			<arg line="-unicode-range *" />
+			<arg line="-output source/flash/resources/fonts/fff.swf" />
+			<arg line="source/flash/resources/fonts/HelveticaNeue_W1G_Full.dfont" />
+		</exec>
+	</target>
+
+
+</project>

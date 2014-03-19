@@ -1,0 +1,75 @@
+nilsdoehri/Users/nilsdoehring/_adobe_as3/flex4.5.0.19318/bin/fdb ; exit;
+
+
+
+ANSWER 1
+
+Hi Nils,
+
+To debug an application via command line.
+You need to create apk-debug using new command line parameter -listen
+Following are the steps
+
+1.Execute following command to package an application.
+
+adt -package -target apk-debug -listen 7936 -storetype PKCS12 -keystore Certificate.p12 -storepass Password OutputfileName.apk Inputfile-app.xml Inputfile.swf
+
+2. Launch an application on the device after installing using command
+
+adb -install OutputfileName.apk
+
+After this step You need Fdb.jar to debug the application via command line.
+You have to wait till flash builder new drop is available.
+There is a link given in Release notes to join Flash builder prerelease .
+Once Flash builder new drop is available you can use the flex sdk and then debugging can be done by doing following steps.
+
+. Forward port on the Desktop using adb command
+
+adb -d forward tcp:7936 tcp:7936
+
+
+3. Launch fdb using command
+
+fdb -p 7936
+
+4. On executing above command fdb terminal will be open then execute
+
+(fdb) file Outputfile.swf
+(fdb) run
+
+run command will throw following output
+
+Player connected; session starting.
+Set breakpoints and then type ’continue’ to resume the session.
+[SWF] Outputfile.swf - 1,436,428 bytes after decompression
+
+Now give name of function to debug
+
+(fdb) break funtionname
+
+following output will be shown
+
+Breakpoint 1 created, but not yet resolved.
+The breakpoint will be resolved when the corresponding file or function is loaded.
+
+Now execute continue command to
+
+(fdb)c
+
+5. After this Debug session will be  establish . All you have to do is click the button on the application which will hit the function mention in break command
+
+
+
+ANSWER 2
+
+Please do the following steps:
+
+1.      Package the application using -listen <port-number> with ADT.
+
+2.      Install the application on the device.
+
+3.      Launch the application on the device using: adt -launchApp -debuggerPort <port-number>  -appid <app-id>. Please specify the same port that was used during packaging of the application.
+
+4.      You also need the latest fdb to use USB debugging feature and may get it from the Flex Hero pre-release or Flash Builder Burrito pre-release: https://prerelease.adobe.com/project/home.html?cap={B4DD6EBA-22D8-48AF-BD7E-0C95BD5EAE0C}<https://prerelease.adobe.com/project/home.html?cap=%7bB4DD6EBA-22D8-48AF-BD7E-0C95BD5EAE0C%7d>
+
+5.      Launch fdb -p <port-number>.

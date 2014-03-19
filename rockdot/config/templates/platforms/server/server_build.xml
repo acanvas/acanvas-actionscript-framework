@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Server Build" default="" basedir="../../">
+	<import file="../../config/includes.xml" />
+	<property file="config/global.properties" />
+	<property file="platforms/html/html.properties" />
+
+	<!-- ######################################
+				Compile and Upload
+		###################################### -->
+
+	<target name="_deploy" description="Install Backend and SQL">
+		<!-- Cleanup target dir (except library dir) -->
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="target/server" includes="application/configs/**/*" />
+		</delete>
+		<mkdir dir="target/server" />
+
+		<!-- Copy sources from this Project's source dir to target dir -->
+		<antcall target="copy_and_replace_tokens">
+			<param name="src" value="source/server" />
+			<param name="target" value="target/server" />
+			<param name="encoding" value="${flash.encoding}" />
+		</antcall>
+
+		<!-- compile swf and assemble files -->
+		<antcall target="build_swf" />
+
+		<!-- install sql tables -->
+		<antcall target="_install_sql" />
+
+		<!-- upload to server -->
+		<if>
+			<!-- In Local mode, we can omit the upload -->
+			<equals arg1="${global.environment}" arg2="local" />
+			<then>
+				<echo message="Dude, you're in local mode. I won't upload anything. Check config/global.properties" />
+			</then>
+			<!-- In all other modes, we have to upload -->
+			<else>
+				<input message="Are you sure you want to upload the Backend to the +++${global.environment}+++ server? (y/n)" addproperty="i_am_sure_upload" defaultvalue="n" />
+				<if>
+					<equals arg1="${i_am_sure_upload}" arg2="n" />
+					<then>
+						<echo message="Thought so... :-)" />
+					</then>
+					<else>
+
+						<antcall target="copy_and_replace_tokens">
+							<param name="src" value="${global.dir.rockdot}/source/htaccess" />
+							<param name="target" value="target/server" />
+							<param name="encoding" value="${flash.encoding}" />
+						</antcall>
+
+						<ftp verbose="yes" action="mkdir" remotedir="${accounts.ftp.remotedir}" server="${accounts.ftp.host}" userid="${accounts.ftp.user}" password="${accounts.ftp.pw}" />
+
+						<antcall target="ftp_upload">
+							<param name="host" value="${accounts.ftp.host}" />
+							<param name="user" value="${accounts.ftp.user}" />
+							<param name="password" value="${accounts.ftp.pw}" />
+							<param name="remotedir" value="${accounts.ftp.remotedir}" />
+							<param name="localdir" value="target/server" />
+						</antcall>
+					</else>
+				</if>
+			</else>
+		</if>
+
+	</target>
+
+	<!-- install SQL tables and delete installation files afterwards -->
+	<target name="_install_sql">
+		<input message="Are you sure you want to setup the database on this server? +++${global.environment}+++ (y/n)" addproperty="i_am_sure" defaultvalue="n" />
+		<if>
+			<equals arg1="${i_am_sure}" arg2="y" />
+			<then>
+				<echo message="Okay, let's go!" />
+
+				<!-- Copy SQL setup sources from Rockdot dir to target dir -->
+				<antcall target="copy_and_replace_tokens">
+					<param name="src" value="${global.dir.rockdot}/source/mysql" />
+					<param name="target" value="target/server/public/mysql" />
+					<param name="encoding" value="${flash.encoding}" />
+				</antcall>
+
+				<if>
+					<!-- In Local mode, we can omit the upload -->
+					<equals arg1="${global.environment}" arg2="local" />
+					<then>
+						<!-- install SQL tables by calling a script from the browser-->
+						<fdt.browse location="${project.host}/mysql/install.php" />
+						<sleep milliseconds="3000" />
+					</then>
+
+					<!-- In all other modes, we have to upload -->
+					<else>
+
+						<ftp verbose="yes" passive="yes" depends="yes" timediffauto="true" remotedir="${accounts.ftp.remotedir}" server="${accounts.ftp.host}" userid="${accounts.ftp.user}" password="${accounts.ftp.pw}">
+							<fileset dir="target/server">
+								<include name="public/mysql/**" />
+							</fileset>
+						</ftp>
+
+						<sleep milliseconds="1000" />
+
+						<fdt.browse location="${project.host}/mysql/install.php" />
+
+						<sleep milliseconds="3000" />
+
+						<ftp verbose="yes" action="del" remotedir="${accounts.ftp.remotedir}" server="${accounts.ftp.host}" userid="${accounts.ftp.user}" password="${accounts.ftp.pw}">
+							<fileset>
+								<include name="public/mysql/**" />
+							</fileset>
+						</ftp>
+
+					</else>
+				</if>
+			</then>
+		</if>
+
+		<!-- Cleanup: delete files from target dir -->
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="target/server/public/mysql" includes="**/*" />
+		</delete>
+	</target>
+
+
+	<!-- ######################################
+			SWF Operations
+		###################################### -->
+
+	<target name="build_swf_and_debug" description="Build the App" depends="build_swf, debug" />
+
+	<target name="build_swf">
+		<antcall target="project_build_subtask">
+			<param name="target" value="target/server/public" />
+			<param name="version" value="${www.playerversion}" />
+			<param name="width" value="${www.flash.default.size.width}" />
+			<param name="height" value="${www.flash.default.size.height}" />
+			<param name="entrypoint" value="${flash.file.entrypoint.preloader}" />
+		</antcall>
+	</target>
+
+
+	<!-- ######################################
+			SWF Debug
+		###################################### -->
+
+	<target name="debug" description="Debug in Browser: localhost" depends="">
+		<antcall target="_start_debugger" />
+
+		<exec executable="open" dir="." failonerror="true">
+			<!--${global.file.chrome} -->
+			<arg line="${project.host}/?gate=off" />
+		</exec>
+	</target>
+
+
+	<!-- ######################################
+			BROWSE PHPMYADMIN
+		###################################### -->
+	<target name="browse_phpmyadmin" description="Open in Browser: PHPMyAdmin Interface">
+		<fdt.browse location="${accounts.phpmyadmin}" />
+	</target>
+
+
+
+
+</project>

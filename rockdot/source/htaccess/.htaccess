@@ -1,0 +1,5 @@
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^apps.jvm-neckar.de$ [NC,OR]
+RewriteCond %{HTTP_HOST} ^apps.jvm-neckar.de$
+RewriteCond %{REQUEST_URI} !rockdot-demo/public/
+RewriteRule (.*) /rockdot-demo/public/$1 [L]

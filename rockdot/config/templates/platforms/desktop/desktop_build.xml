@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Desktop Build OSX" default="" basedir="../../">
+	<import file="../../config/includes.xml" />
+	<property name="dir.this" value="platforms/desktop" />
+	<property file="${dir.this}/desktop.properties" />
+
+	<target name="build_swf" description="Build the App">
+		<delete failonerror="false" includeemptydirs="true">
+			<fileset dir="${desktop.dir.build}" includes="**/*" />
+		</delete>
+		<mkdir dir="${desktop.dir.build}" />
+
+		<delete failonerror="false" includeemptydirs="false">
+			<fileset dir="${desktop.dir.target}" includes="**/*" />
+		</delete>
+		<mkdir dir="${desktop.dir.target}" />
+
+		<antcall target="project_build_subtask">
+			<param name="target" value="${desktop.dir.build}" />
+			<param name="version" value="${desktop.playerversion}" />
+			<param name="width" value="${desktop.width}" />
+			<param name="height" value="${desktop.height}" />
+			<param name="entrypoint" value="${flash.file.entrypoint.preloader}" />
+			<param name="frametwo" value="${flash.entrypoint.application}" />
+		</antcall>
+
+		<!-- COPY ICONS (to /icons) -->
+		<copy todir="${desktop.dir.include}" encoding="ISO-8859-1" preservelastmodified="true">
+			<fileset dir="${dir.this}/resources/icons" includes="**/*.png" />
+		</copy>
+
+		<!-- COPY APP DESCRIPTOR (to root) -->
+		<copy todir="${desktop.dir.build}" encoding="${flash.encoding}" preservelastmodified="true">
+			<fileset file="${dir.this}/air-desktop.xml" />
+			<filterset refid="copyfilterset" />
+			<filterset>
+				<filtersfile file="${dir.this}/desktop.properties" />
+			</filterset>
+		</copy>
+
+	</target>
+
+
+
+	<target name="build" description="Build the App and Package as apk">
+		<antcall target="build_swf" />
+
+		<!-- Package .air 
+		<antcall target="build_app">
+			<param name="target" value="${desktop.target.air}"/>
+			<param name="filename" value="${desktop.file.air}"/>
+		</antcall>
+		-->
+
+		<!-- Package .dmg -->
+		<antcall target="build_app">
+			<param name="target" value="${desktop.target.native}" />
+			<param name="filename" value="${desktop.file.native.mac}" />
+		</antcall>
+
+		<!-- Package .app -->
+		<!-- TODO: Browser Invocation not allowed in captive runtime! 
+		-->
+		<antcall target="build_app">
+			<param name="target" value="${desktop.target.native.captive}" />
+			<param name="filename" value="${desktop.file.native.mac.captive}" />
+		</antcall>
+
+		<!-- REQUIRES WINDOWS OS -->
+		<!-- Package .exe 
+		<antcall target="build_app">
+			<param name="target" value="${desktop.target.native.captive}"/>
+			<param name="filename" value="${desktop.file.native.win.captive}"/>
+		</antcall>
+		-->
+	</target>
+
+	<target name="build_swf_and_debug_local" description="Build the App and Debug">
+		<antcall target="build_swf" />
+		<antcall target="debug_local" />
+	</target>
+
+	<!-- ###################################### Private Method: Desktop Packager 
+			###################################### -->
+	<target name="build_app" depends="">
+		<echo message="Packaging Desktop AIR (${target})" />
+
+		<exec executable="${air.adt}" dir="${desktop.dir.build}" failonerror="true">
+			<arg line="-package " />
+			<arg line="-storetype ${desktop.storetype}" />
+			<arg line="-keystore ${desktop.keystore}" />
+			<arg line="-storepass ${desktop.keypass}" />
+			<arg line="-target ${target}" />
+			<arg line="../../${filename}" />
+			<arg line="${desktop.file.descriptor}" />
+			<arg line="-extdir ${desktop.dir.extensions.packaged}" />
+			<!-- includes -->
+			<arg line="include" />
+			<arg line="${project.appversion}" />
+			<arg line="${flash.file.name}.swf" />
+		</exec>
+		<echo message="Packaging Desktop - Finished" />
+
+	</target>
+
+
+	<!-- ######################################
+				DESKTOP DEBUG
+		###################################### -->
+	<target name="debug" description="Desktop Air Local Debug">
+		<echo message="Desktop Air Local Debug" />
+		<antcall target="_start_debugger" />
+
+		<exec executable="${air.adl}" dir="${desktop.dir.build}" failonerror="false">
+			<arg line="-extdir ${desktop.dir.extensions.unpackaged}/" />
+			<arg line="-profile ${desktop.adl.profile}" />
+			<arg line="${desktop.file.descriptor}" />
+		</exec>
+	</target>
+
+
+	<!-- ######################################
+		PRIVATE METHODS
+		###################################### -->
+
+	<target name="air_selfsign">
+		<echo message="Self-Signing" />
+		<exec executable="${air.adt}" dir="." failonerror="true">
+			<arg line="-certificate" />
+			<arg line="-cn SelfSign" />
+			<arg line="-c US 1024-RSA" />
+			<arg line="${desktop.keystore}" />
+			<arg line="${desktop.keypass}" />
+		</exec>
+		<echo message="Selfsigned Certificate created" />
+	</target>
+
+
+</project>

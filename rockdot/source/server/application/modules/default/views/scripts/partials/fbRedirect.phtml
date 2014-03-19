@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Redirect</title>
+		<script>
+			<?php $config = Zend_Registry::get('Application_Config'); ?>
+		
+			window.top.location.href = "https://www.facebook.com/dialog/oauth?client_id=<? echo $config->facebook->appid; ?>&redirect_uri="
+			 + document.location.protocol 
+			 + "<? echo $config->page_url; ?>%3Fapp_data%3D<? echo $config->app_data; ?>";
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<objects xmlns="http://www.springactionscript.org/schema/objects"
+		 xmlns:rockdot="http://www.sounddesignz.com/schema/rockdot"
+		 xmlns:mad="http://www.sounddesignz.com/schema/mad"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.springactionscript.org/schema/objects http://www.sounddesignz.com/schema/spring/spring-actionscript-objects-2.0.xsd 
+					http://www.sounddesignz.com/schema/mad http://www.sounddesignz.com/schema/mad/madcomponents-rockdot-1.0.xsd 
+					http://www.sounddesignz.com/schema/rockdot http://www.sounddesignz.com/schema/rockdot/spring-actionscript-rockdot-2.0.xsd">
+
+	<!-- Property Files -->
+	<property file="@project.appversion@/bootstrap-@@language@@.properties" />
+	<property file="@project.appversion@/project.properties" />
+	
+	<!-- Application Delegate -->
+	<object id="bootstrap" class="com.rockdot.bootstrap.Bootstrap" lazy-init="true"></object>
+
+	<!-- Plugins -->
+	<object id="plugin_state" class="com.rockdot.plugin.state.StatePlugin"></object>
+	<!-- 
+	<object id="plugin_io" class="com.rockdot.plugin.io.IOPlugin"></object>
+	<object id="plugin_facebook" class="com.rockdot.plugin.facebook.FacebookPlugin"></object>
+	<object id="plugin_ugc" class="com.rockdot.plugin.ugc.UGCPlugin"></object>
+	 -->
+	<object id="plugin_project" class="com.rockdot.project.Project"></object>
+	
+</objects>

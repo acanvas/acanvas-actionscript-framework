@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="iOS Build" default="" basedir="../../">
+	<import file="../../config/includes.xml" />
+	<property name="dir.this" value="platforms/ios" />
+	<property file="${dir.this}/ios.properties" />
+
+	<!-- ######################################
+			IOS: Prepare and Package
+		###################################### -->
+
+	<target name="build_swf">
+		<!-- CLEAN UP -->
+		<delete includeemptydirs="false" failonerror="false">
+			<fileset dir="${ios.dir.build}" includes="**/*" />
+		</delete>
+		<mkdir dir="${ios.dir.build}" />
+
+		<delete includeemptydirs="false" failonerror="false">
+			<fileset dir="${ios.dir.target}" includes="**/*" />
+		</delete>
+		<mkdir dir="${ios.dir.target}" />
+
+		<!-- COMPILE SWF -->
+		<antcall target="project_build_subtask">
+			<param name="target" value="${ios.dir.build}" />
+			<param name="version" value="${ios.playerversion}" />
+			<param name="width" value="${ios.width}" />
+			<param name="height" value="${ios.height}" />
+			<param name="entrypoint" value="${flash.file.entrypoint.preloader}" />
+			<param name="frametwo" value="${flash.entrypoint.application}" />
+		</antcall>
+
+		<!-- COPY ICONS (to /icons) -->
+		<copy todir="${ios.dir.include}" encoding="ISO-8859-1" preservelastmodified="true">
+			<fileset dir="${dir.this}/resources/icons" includes="**/*.png" />
+		</copy>
+
+		<!-- COPY LAUNCH IMAGES (to root) -->
+		<copy todir="${ios.dir.build}" encoding="ISO-8859-1" preservelastmodified="true">
+			<fileset dir="${dir.this}/resources/images/launch" includes="**/*.png" />
+		</copy>
+
+		<!-- COPY APP DESCRIPTOR (to root) -->
+		<copy todir="${ios.dir.build}" encoding="${flash.encoding}" preservelastmodified="true">
+			<fileset file="${dir.this}/air-ios.xml" />
+			<filterset refid="copyfilterset" />
+			<filterset>
+				<filtersfile file="${dir.this}/ios.properties" />
+			</filterset>
+		</copy>
+
+		<echo message="iOS SWF Build - DONE" />
+
+	</target>
+
+	<target name="build" description="Build the App and package as ipa">
+		<antcall target="build_swf" />
+		<antcall target="build_app" />
+	</target>
+
+	<target name="build_swf_and_debug_local" description="Build the App and Debug">
+		<antcall target="build_swf" />
+		<antcall target="debug_local" />
+	</target>
+
+
+	<!-- ######################################
+			Private Method: iOS Packager
+		###################################### -->
+
+	<target name="build_app" depends="">
+		<echo message="Packaging iOS IPA - This will take about 2 minutes..." />
+		<hostinfo />
+		<exec executable="${air.adt}" dir="${ios.dir.build}" failonerror="true">
+			<arg line="-package" />
+			<arg line="-target ${ios.target}" />
+			<arg line="-listen 16000" />
+
+			<!--
+				Move the "listen" line above into this comment when 
+				packaging without debug
+			-->
+
+			<arg line="-storetype ${ios.storetype}" />
+			<arg line="-keystore ${ios.keystore}" />
+			<arg line="-storepass ${ios.keypass}" />
+			<arg line="-provisioning-profile '${ios.provprofile}'" />
+			<arg line="../../${ios.file.ipa}" />
+			<arg line="${ios.file.descriptor}" />
+			<arg line="-extdir ${ios.dir.extensions.packaged}" />
+			<!-- includes -->
+			<arg line="include" />
+			<arg line="${project.appversion}" />
+			<arg line="Rockdot.png" />
+			<arg line="Rockdot@2x.png" />
+			<arg line="Rockdot-Default.png" />
+			<arg line="Rockdot-Landscape.png" />
+			<arg line="${flash.file.name}.swf" />
+		</exec>
+		<echo message="Packaging iOS IPA - Finished" />
+	</target>
+
+
+	<!-- ######################################
+					IOS DEBUG
+		###################################### -->
+
+	<target name="debug_local" description="iOS AIR Local Debug">
+		<echo message="iOS Air Remote Debug: Start App on iOS and enter IP Address" />
+		<antcall target="_start_debugger" />
+		<exec executable="${air.adl}" dir="${ios.dir.build}" failonerror="false">
+			<arg line="-extdir ${ios.dir.extensions.unpackaged}/" />
+			<arg line="-profile ${ios.adl.profile}" />
+			<arg line="${ios.file.descriptor}" />
+		</exec>
+	</target>
+
+	<target name="profile_local" description="profile!">
+		<antcall target="_start_debugger" />
+		<antcall target="_start_profiler">
+			<param name="file" value="${ios.dir.build}/${project.name}.swf" />
+		</antcall>
+
+		<exec executable="${air.adl}" dir="${android.dir.build}" failonerror="false">
+			<arg line="-extdir ${android.dir.extensions.unpackaged}/" />
+			<arg line="-profile ${android.adl.profile}" />
+			<arg line="-screensize ${android.width}x${android.height}:${android.width}x${android.height}" />
+			<arg line="${android.file.descriptor}" />
+		</exec>
+	</target>
+
+	<target name="debug_usb" description="iOS AIR USB Debug">
+		<echo message="iOS Air USB Debug" />
+
+		<exec executable="${air.idb}" dir="." failonerror="true">
+			<arg line="-devices" />
+		</exec>
+
+		<input message="Please type in the handle of your device (see output)" addproperty="device_handle" defaultvalue="1" />
+
+		<echo>Stopping eventual Port Forwarding...</echo>
+		<exec executable="${air.idb}" dir="." failonerror="false" spawn="true">
+			<arg line="-stopforward 7936" />
+		</exec>
+
+		<echo>Setting up Port Forwarding...</echo>
+		<exec executable="${air.idb}" dir="." failonerror="false" spawn="true">
+			<arg line="-forward 7936 16000 ${device_handle}" />
+		</exec>
+
+		<echo>Starting Debugger...</echo>
+		<if>
+			<equals arg1="${is_fdt}" arg2="true" />
+			<then>
+				<fdt.startDebugger projectname="${FDTProject}" port="7936" asclient="true" />
+			</then>
+			<else>
+				<echo>FDT Debugger not found.\n Starting App anyways.</echo>
+			</else>
+		</if>
+	</target>
+
+	<target name="debug_wifi">
+		<echo message="Debugging App. \n Now go and launch it manually!" />
+
+		<antcall target="_start_debugger" />
+
+		<!-- FYI  -->
+	</target>
+
+	<!-- ######################################
+					IPA INSTALL
+		###################################### -->
+
+	<target name="install_app_on_device" description="Install App on iOS Device">
+		<echo message="Uninstalling App from iOS Device" />
+		<exec executable="${air.adt}" dir="." failonerror="false">
+			<arg line="-uninstallApp -platform ios -appid de.jvm.neckar.flaphone" />
+		</exec>
+		<echo message="Installing App on iOS Device" />
+		<exec executable="${air.adt}" dir="." failonerror="true">
+			<arg line="-installApp -platform ios -package ${ios.file.ipa}" />
+		</exec>
+	</target>
+</project>

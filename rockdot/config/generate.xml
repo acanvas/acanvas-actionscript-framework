@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Rockdot Project Generator" default="" basedir="../">
+	<taskdef resource="net/sf/antcontrib/antlib.xml" />
+	<taskdef name="fileutil" classname="ise.antelope.tasks.FileUtilTask" />
+
+	<property file="config/ant/global.properties" />
+
+	<property name="dir.platforms.source" value="config/templates/platforms" />
+	<property name="dir.www.source.html" value="source/html" />
+	<property name="dir.www.source.assets" value="source/server/public/assets" />
+
+
+	<!-- Template Installation (Abstract) -->
+	<target name="_template">
+		<!-- Copy FDT related files -->
+		<copy todir="${project.dir}" overwrite="true">
+			<fileset dir="config/templates/projects/${template}" includes=".settings/**/*,.project" />
+		</copy>
+		<!-- Copy Actionscript related source files -->
+		<copy todir="${project.dir}/source/flash" overwrite="true">
+			<fileset dir="config/templates/projects/${template}" includes="resources/**/*,src/**/*,swc/**/*" />
+		</copy>
+		<if>
+			<available file="config/templates/projects/${template}/config" type="dir" />
+			<then>
+				<!-- Copy Global Configuration -->
+				<copy todir="${project.dir}/config" overwrite="true">
+					<fileset dir="config/templates/projects/${template}/config" excludes="project.properties,accounts.properties" />
+				</copy>
+				<!-- Copy and prepare Project Configuration -->
+				<antcall target="_copy">
+					<param name="file" value="config/templates/projects/${template}/config/project.properties" />
+					<param name="target.name" value="project" />
+				</antcall>
+				<antcall target="_copy">
+					<param name="file" value="config/templates/projects/${template}/config/accounts.properties" />
+					<param name="target.name" value="accounts" />
+				</antcall>
+			</then>
+		</if>
+	</target>
+
+	<target name="_copy">
+		<if>
+			<available file="${file}" />
+			<then>
+				<copy tofile="${project.dir}/config/${target.name}.local.properties" file="${file}" overwrite="true" />
+				<copy tofile="${project.dir}/config/${target.name}.live.properties" file="${file}" overwrite="true" />
+			</then>
+			<else>
+				<echo>${file} not existing. Skipping.</echo>
+			</else>
+		</if>
+	</target>
+
+	<target name="_prompt_project" unless="project.name">
+		<!-- Prompt for Project Name and create global properties -->
+		<input message="Please enter the desired name of your project." addproperty="project.name.local" defaultvalue="project-demo" />
+		<property name="project.name" value="${project.name.local}" />
+		<property name="project.dir" value="${basedir}/../${project.name}" />
+	</target>
+
+
+	<!-- Template Deletion from source folder (Abstract) -->
+	<target name="_delete_template">
+		<input message="Are you sure you want to delete the existing template named '${project.name}'? (y/n)" addproperty="i_am_sure" defaultvalue="n" />
+		<if>
+			<equals arg1="${i_am_sure}" arg2="y" />
+			<then>
+				<delete includeemptydirs="true" failonerror="false">
+					<fileset dir="${project.dir}" includes="**/*" />
+				</delete>
+			</then>
+			<else>
+				<echo>Phew, that was close...</echo>
+			</else>
+		</if>
+	</target>
+
+
+	<!-- Template Installers -->
+	<target name="project_base" description="Install Project Base" depends="_prompt_project">
+
+		<!-- Check if the project has been write protected -->
+		<if>
+			<equals arg1="${project.writelock}" arg2="true" />
+			<then>
+				<fail message="project.writelock is true. No Templates will be written." />
+			</then>
+		</if>
+
+		<!-- Delete Template if exists -->
+		<antcall target="_delete_template" />
+		<echo>Installing HTML Support</echo>
+		<antcall target="platform_html" />
+		<!-- Install Template Commons -->
+		<antcall target="_template">
+			<param name="template" value="bootstrap" />
+		</antcall>
+		<!-- Copy globals -->
+		<copy file="config/ant/global.properties" tofile="${project.dir}/config/global.properties" overwrite="true" />
+		<!-- Install Base Template -->
+		<antcall target="_template">
+			<param name="template" value="project-base" />
+		</antcall>
+	</target>
+
+	<target name="project_facebook" description="Install Project with Facebook Support and Demo" depends="project_base">
+		<antcall target="_template">
+			<param name="template" value="project-facebook" />
+		</antcall>
+		<echo>Installing Server Support</echo>
+		<antcall target="platform_server" />
+		<echo>Done. Now: </echo>
+		<echo>1. Add or refresh your project (${project.name}) in FDT Explorer</echo>
+		<echo>2. Go to /private/etc/hosts and add: 127.0.0.1	www.local.com</echo>
+		<echo>3. Go to /Applications/MAMP/conf/apache/httpd.conf and add: Include ${project.dir}/platforms/server/www.local.com-vhost.conf</echo>
+		<echo>4. Start MAMP Servers</echo>
+		<echo>5. Run _deploy task in platforms/server/server_build.xml</echo>
+	</target>
+
+	<target name="demo_3d" description="Install Demo with Away3D and Starling Support" depends="project_base">
+		<!-- Install Template -->
+		<antcall target="_template">
+			<param name="template" value="demo-3d" />
+		</antcall>
+		<!-- Copy Binaries -->
+		<copy todir="${project.dir}/source/flash/resources" overwrite="true" encoding="ISO-8859-1">
+			<fileset dir="config/templates/projects/demo-3d/resources" />
+		</copy>
+		<copy todir="${project.dir}/source/html/assets/onkba" overwrite="true" encoding="ISO-8859-1">
+			<fileset dir="config/templates/projects/demo-3d/resources/away3d/onkba/www" />
+		</copy>
+		<echo>Installing Desktop AIR Support</echo>
+		<antcall target="platform_desktop" />
+		<echo>Done. Now: </echo>
+		<echo>1. Refresh your project in FDT Explorer</echo>
+	</target>
+
+	<target name="demo_feathers" description="Install Demo with Feathers Support" depends="project_base">
+		<!-- Install Template -->
+		<antcall target="_template">
+			<param name="template" value="demo-feathers" />
+		</antcall>
+		<!-- Copy Binaries -->
+		<copy todir="${project.dir}/source/flash/resources" overwrite="true" encoding="ISO-8859-1">
+			<fileset dir="config/templates/projects/demo-feathers/resources" />
+		</copy>
+		<!-- Copy 3D UI Plugin from 3D Demo -->
+		<copy todir="${project.dir}/source/flash/src/com/rockdot/plugin" overwrite="true">
+			<fileset dir="config/templates/projects/demo-3d/src/com/rockdot/plugin" />
+		</copy>
+		<echo>Installing Desktop AIR Support</echo>
+		<antcall target="platform_desktop" />
+		<echo>Done. Now: </echo>
+		<echo>1. Refresh your project in FDT Explorer</echo>
+	</target>
+
+	<target name="demo_ugc" description="Install Demo with UGC and Facebook Support" depends="project_base">
+		<!-- Install Template -->
+		<antcall target="_template">
+			<param name="template" value="demo-ugc" />
+		</antcall>
+		<echo>Installing Desktop AIR Support</echo>
+		<antcall target="platform_desktop" />
+		<echo>Installing Server Support</echo>
+		<antcall target="platform_server" />
+		<echo>Done. Now: </echo>
+		<echo>1. Add or refresh your project (${project.name}) in FDT Explorer</echo>
+		<echo>2. Go to /private/etc/hosts and add: 127.0.0.1	www.local.com</echo>
+		<echo>3. Go to /Applications/MAMP/conf/apache/httpd.conf and add: Include ${project.dir}/platforms/server/www.local.com-vhost.conf</echo>
+		<echo>4. Start MAMP Servers</echo>
+		<echo>5. Run _deploy task in platforms/server/server_build.xml</echo>
+	</target>
+
+	<target name="demo_mc3d" description="Install Demo with Mad Components 3D Support" depends="project_base">
+		<!-- Install Template -->
+		<antcall target="_template">
+			<param name="template" value="demo-mc3d" />
+		</antcall>
+		<echo>Installing Desktop AIR Support</echo>
+		<antcall target="platform_desktop" />
+		<echo>Done. Now: </echo>
+		<echo>1. Refresh your project in FDT Explorer</echo>
+	</target>
+
+	<target name="demo_kinect" description="Install Demo with Kinect Support" depends="project_base">
+		<!-- Install Template -->
+		<antcall target="_template">
+			<param name="template" value="demo-kinect" />
+		</antcall>
+		<!-- Install AIR Desktop Support -->
+		<echo>Installing AIR Desktop Support</echo>
+		<antcall target="platform_desktop" />
+		<!-- Copy AIR application descriptor with reference to Kinect Native Extension -->
+		<copy file="config/templates/native-extensions/desktop/air-desktop-kinect.xml" tofile="${project.dir}/platforms/desktop/air-desktop.xml" overwrite="true" />
+		<echo>Installing AIR Desktop Kinect Native Extension</echo>
+		<!-- Copy Binaries -->
+		<copy todir="${project.dir}/platforms/desktop/resources/extensions-osx" overwrite="true" encoding="ISO-8859-1">
+			<fileset dir="config/templates/native-extensions/desktop/kinect-osx" />
+		</copy>
+
+		<echo>Done. Now: </echo>
+		<echo>1. Refresh your project in FDT Explorer</echo>
+	</target>
+
+
+	<!-- Platform Support Installers -->
+	<target name="platform_android" description="Install Android Support" depends="_prompt_project">
+		<copy todir="${project.dir}/platforms/android">
+			<fileset dir="${dir.platforms.source}/android" />
+		</copy>
+	</target>
+
+	<target name="platform_blackberry" description="Install Blackberry Support" depends="_prompt_project">
+		<copy todir="${project.dir}/platforms/blackberry">
+			<fileset dir="${dir.platforms.source}/blackberry" />
+		</copy>
+	</target>
+
+	<target name="platform_desktop" description="Install Desktop Support" depends="_prompt_project">
+		<copy todir="${project.dir}/platforms/desktop">
+			<fileset dir="${dir.platforms.source}/desktop" />
+		</copy>
+	</target>
+
+	<target name="platform_html" description="Install Static HTML Support" depends="_prompt_project">
+		<copy todir="${project.dir}/platforms/html">
+			<fileset dir="${dir.platforms.source}/html" />
+		</copy>
+		<!-- Copy sources from Rockdot to this Project -->
+		<copy todir="${project.dir}/source/html" preservelastmodified="false">
+			<fileset dir="${dir.www.source.html}" excludes="library/**/*" />
+		</copy>
+
+		<!-- Copy assets from Rockdot to this Project -->
+		<copy todir="${project.dir}/source/html/assets" preservelastmodified="false">
+			<fileset dir="${dir.www.source.assets}" excludes="library/**/*" />
+		</copy>
+	</target>
+
+	<target name="platform_ios" description="Install iOS Support" depends="_prompt_project">
+		<copy todir="${project.dir}/platforms/ios">
+			<fileset dir="${dir.platforms.source}/ios" />
+		</copy>
+	</target>
+
+	<target name="platform_server" description="Install Server Support" depends="_prompt_project">
+		<!-- Copy Config -->
+		<copy todir="${project.dir}/platforms/server" preservelastmodified="false">
+			<fileset dir="${dir.platforms.source}/server" excludes="**/*.conf" />
+		</copy>
+		<copy todir="${project.dir}/platforms/server" preservelastmodified="false">
+			<fileset file="${dir.platforms.source}/server/www.local.com-vhost.conf" />
+			<filterset>
+				<filter token="project.dir" value="${project.dir}" />
+			</filterset>
+		</copy>
+
+		<!-- Copy sources from Rockdot to this Project -->
+		<copy todir="${project.dir}/source/server" preservelastmodified="false">
+			<fileset dir="source/server" excludes="library/**/*" />
+		</copy>
+
+		<!-- Copy library from Rockdot to this Project (directly into target dir) -->
+		<antcall target="copy_and_replace_tokens">
+			<param name="src" value="source/server/library" />
+			<param name="target" value="${project.dir}/target/server/library" />
+		</antcall>
+
+		<!-- Zend is downloaded from elsewhere and copied into target dir -->
+		<antcall target="_zend" />
+
+		<!-- Create upload dir in target dir -->
+		<mkdir dir="${project.dir}/target/server/uploads" />
+
+	</target>
+	<filterset id="copyfilterset">
+		<filter token="project.dir" value="${project.dir}" />
+		<filtersfile file="${basedir}/config/ant/global.properties" />
+		<filtersfile file="${basedir}/config/templates/projects/project-facebook/config/project.properties" />
+		<filtersfile file="${basedir}/config/templates/projects/project-facebook/config/accounts.properties" />
+		<filtersfile file="${basedir}/config/templates/platforms/html/html.properties" />
+		<filtersfile file="${basedir}/config/ant/swf-build/swf.properties" />
+	</filterset>
+	<target name="copy_and_replace_tokens">
+		<copy todir="${target}" encoding="UTF-8" preservelastmodified="true">
+			<fileset dir="${src}" includes="**/*" excludes="config/, **/*.cache,**/*.png,**/*.jpg,**/*.gif,**/*.awd" />
+			<filterset refid="copyfilterset" />
+			<filterset>
+				<filter token="project.dir" value="${project.dir}" />
+			</filterset>
+		</copy>
+		<copy todir="${target}" encoding="ISO-8859-1" preservelastmodified="true">
+			<fileset dir="${src}" includes="**/*.png,**/*.jpg,**/*.gif,**/*.awd" />
+		</copy>
+	</target>
+
+
+	<!-- ######################################
+			INSTALL ZEND
+		###################################### -->
+	<target name="_zend">
+		<condition property="dir.exists">
+			<available file="${project.dir}/target/server/library/Zend" type="dir" />
+		</condition>
+		<if>
+			<equals arg1="${dir.exists}" arg2="true" />
+			<then>
+			</then>
+			<else>
+				<mkdir dir="${project.dir}/target/server/library/Zend" />
+				<unzip src="${basedir}/bin/zend.zip" dest="${project.dir}/target/server/library" />
+			</else>
+		</if>
+	</target>
+</project>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<application xmlns="http://ns.adobe.com/air/application/3.5">
+	<allowBrowserInvocation>true</allowBrowserInvocation>
+	<id>@project.id@</id>
+	<versionNumber>0.1</versionNumber>
+	<filename>@flash.file.name@.apk</filename>
+
+	<description>
+		<text xml:lang="en">This is an example.</text>
+		<text xml:lang="de">Beispiel-Beschreibung.</text>
+	</description>
+
+	<name>
+		<text xml:lang="en">@project.title@</text>
+		<text xml:lang="de">@project.title@</text>
+	</name>
+	<copyright>project.author</copyright>
+	<initialWindow>
+		<content>@flash.file.name@.swf</content>
+		<systemChrome>none</systemChrome>
+		<visible>true</visible>
+		<autoOrients>true</autoOrients>
+		<aspectRatio>portrait</aspectRatio>
+		<transparent>false</transparent>
+		<fullScreen>true</fullScreen>
+		<renderMode>direct</renderMode>
+		<maximizable>true</maximizable>
+		<minimizable>true</minimizable>
+		<resizable>true</resizable>
+    	<depthAndStencil>true</depthAndStencil>
+	</initialWindow>
+	<customUpdateUI>false</customUpdateUI>
+	<icon>
+		<image36x36>include/icon36.png</image36x36>
+		<image48x48>include/icon48.png</image48x48>
+		<image72x72>include/icon72.png</image72x72>
+		<!-- not supported as of AIR 3.2
+		<image96x96>include/icon96.png</image96x96>
+		-->
+	</icon>
+	<android>
+		<colorDepth>32bit</colorDepth> 
+		<manifestAdditions>  
+			<![CDATA[  
+				<manifest android:installLocation="auto">  
+	                <uses-feature 	android:name="android.hardware.camera" 				android:required="false"/> 
+	                <uses-feature 	android:name="android.hardware.camera.autofocus" 	android:required="false"/> 
+	                <uses-feature 	android:name="android.hardware.camera.flash" 		android:required="false"/> 
+	                <uses-feature 	android:name="android.hardware.microphone" 			android:required="false"/> 
+					
+					 <!--See the Adobe AIR documentation for more information about setting Google Android permissions-->
+	                 <!--Removing the permission android.permission.INTERNET will have the side effect
+	                             of preventing you from debugging your application on your device-->
+	                 <uses-permission android:name="android.permission.INTERNET"/>
+	                 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	                 <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+					<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />  
+	                 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+	                
+	                 <!--The DISABLE_KEYGUARD and WAKE_LOCK permissions should be toggled together
+	                             in order to access AIR's SystemIdleMode APIs-->
+	                 <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+	                 <uses-permission android:name="android.permission.WAKE_LOCK"/>
+	                 <uses-permission android:name="android.permission.CAMERA"/>
+	                 <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+	                
+	                 <!--The ACCESS_NETWORK_STATE and ACCESS_WIFI_STATE permissions should be toggled
+	                             together in order to use AIR's NetworkInfo APIs-->
+	                 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	                 <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+				</manifest>  
+			]]>
+		</manifestAdditions>
+	</android>
+</application>

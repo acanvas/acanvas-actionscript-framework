@@ -1,0 +1,504 @@
+/*
+	*
+	*	@copyright:_________2012, @project.title@
+	*	@link:______________@project.host@
+	*	@author:____________Jung von Matt/Neckar
+	*   @namespace:_________JM
+	*	@function:__________site style settings
+	*
+	*	@version:___________1.0
+	* 	@revision:__________$Revision: 1908 $
+	* 	@lastmodified:______$Date: 2012-12-17 10:44:29 +0100 (Mo, 17 Dez 2012) $,  $Author: oliver.hook $
+	*
+*/
+
+/*-----|| base styles ||-------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------*/
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,a,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strong,sub,sup,tt,var,b,u,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary,time,mark,audio,video,input,textarea,button
+	{
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-size: 100%;
+	background: #FFF;
+	-webkit-font-smoothing: antialiased;
+	/* needs to be tested */
+	/*-moz-hyphens:auto;
+		-ms-hyphens:auto;
+		-webkit-hyphens:auto;
+		hyphens:auto;
+		word-wrap:break-word;*/
+}
+
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section
+	{
+	display: block;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+fieldset,img,abbr,acronym {
+	border: 0;
+}
+
+abbr,acronym {
+	cursor: help;
+	border-bottom: 1px dotted;
+}
+
+em,i,cite,q,dfn,var {
+	font-style: italic;
+	font-weight: inherit;
+}
+
+strong,b,mark {
+	font-weight: bold;
+	font-style: inherit;
+}
+
+caption,th {
+	text-align: left;
+}
+
+q:before,q:after {
+	content: '';
+}
+
+a:focus,embed:focus,object:focus {
+	/* prevents ugly (but maybe useful) outlining on focus */
+	outline: none;
+}
+
+img,embed,object,legend {
+	display: block;
+}
+
+img { /* making HTML resized images look good in IE */
+	-ms-interpolation-mode: bicubic;
+}
+
+sup {
+	line-height: 3px;
+	vertical-align: top;
+}
+
+input::-moz-focus-inner { /* resets inner padding in FF */
+	border: 0;
+	padding: 0;
+}
+
+input[type=search],input[type=number] {
+	/* Remove Webkit Search Input Styles */
+	-webkit-appearance: textfield;
+}
+
+input[type="search"]::-webkit-search-decoration,input[type="search"]::-webkit-search-cancel-button
+	{
+	display: none;
+}
+
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button,input[type=date]::-webkit-inner-spin-button,input[type=date]::-webkit-outer-spin-button
+	{
+	-webkit-appearance: none;
+}
+
+input[type="submit"],input[type="button"],input,textarea,button {
+	-webkit-appearance: none;
+	border-radius: 0;
+}
+
+select:focus,input:focus,textarea:focus {
+	outline-color: transparent;
+	outline-style: none;
+}
+
+button::-moz-focus-inner {
+	border: 0;
+	padding: 0;
+}
+
+.clear { /* clearing floats within html-code about the <br /> tag */
+	clear: both;
+	height: 0;
+	font-size: 0;
+}
+
+.clearfix:before,.clearfix:after {
+	/* clearfix-method without additional markup. needs surrounding element. */
+	content: "";
+	display: table;
+}
+
+.clearfix:after {
+	clear: both;
+}
+
+.JM_ie7 .clearfix {
+	zoom: 1;
+}
+
+/*-----|| page areas ||--------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------*/
+
+/*-----|| area document ||-----*/
+html,.JM_area-ct {
+	width: @www.width.css@;
+	height: @www.height.css@;
+}
+
+.JM_area-dc {
+	/*
+	display: none;
+	background: #@project.bgcolor@ url(../images/css/JM_bg.jpg) repeat-x 0 0;
+	*/
+}
+
+/*-----|| area header ||-----*/
+.JM_area-hd {
+	
+}
+
+/*-----|| area content ||-----*/
+.JM_area-ct-srd { /* surrounding content area elements */
+	
+}
+
+body {
+	font-size: 62.5%;
+	background-color: #@project.bgcolor@;
+	font-family: Helvetica, Arial, sans-serif;
+	height: 100%;
+}
+
+embed:focus,object:focus {
+	/* prevents ugly (but maybe helpful) outlining */
+	outline: none;
+}
+
+.JM_area-ct {
+	
+}
+
+.JM_area-ct>.JM_ct {
+	
+	height: @www.height.css@;
+}
+
+/*-----|| area sidebar ||-----*/
+.JM_area-sb {
+	
+}
+
+.JM_area-sb>.JM_ct {
+	
+}
+
+/*-----|| area footer ||-----*/
+.JM_area-ft {
+	z-index: 30;
+	position: relative;
+	width: 400px;
+	height: 30px;
+	left: 30%;
+	margin: 10px 0 0 0;
+}
+
+.JM_area-ft>.JM_ct {
+	
+}
+
+.JM_area-ft > a, .JM_ctFooterSpacer {
+	float: left;
+	margin-right: 6px;
+	display: block;
+	text-decoration: none;
+	color: #003E2D;
+	font-size: 12px;
+}
+
+.JM_area-ft > a:hover {
+	color: #AAA;
+}
+
+#JM_flashContent { /* for dynamic flash scaling */
+	width: @www.width.css@;
+	height: @www.height.css@;
+}
+
+.JM_ctFanGate {
+	width: 809px;
+	height: 853px;
+}
+
+
+/*-----|| content grids ||-----------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------*/
+
+/*-----|| grid 1 - 1 ||-----*/
+.JM_ct-grid-1-1 { /* 2 cols even */
+	margin-bottom: 40px;
+}
+
+.JM_ct-grid-1-1>.JM_ct-col {
+	float: left;
+	margin-left: 20px;
+	width: 300px;
+}
+
+.JM_ct-grid-1-1>.JM_ct-col:first-child {
+	margin-left: 0;
+}
+
+/*-----|| text objects ||------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------*/
+
+/*-----|| fonts ||-----*/
+* { /* basic font family if no @font-face is included */
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+/*-----|| headlines ||-----*/
+h1 {
+	
+}
+
+/*-----|| links ||-----*/
+a,a:visited { /* basic link groundcolor */
+	color: #464646;
+	text-decoration: none;
+}
+
+a:hover,a:focus,a:active { /* basic link hover color */
+	color: #00FF00;
+	text-decoration: underline;
+}
+
+/*-----|| paragraph ||-----*/
+p {
+	
+}
+
+/*-----|| lists ||-----*/
+.JM_obj-txt-list { /* text list */
+	
+}
+
+.JM_obj-txt-list li {
+	
+}
+
+.JM_obj-txt-list li a {
+	
+}
+
+/*-----|| form objects ||------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------*/
+
+/*-----|| don't care anymore about borders and paddings when setting the width ||-----*/
+input,button,textarea {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+/*-----|| labels global ||-----*/
+.JM_obj-fm-label {
+	display: block;
+}
+
+/*-----|| input[text] global ||-----*/
+.JM_obj-fm-txt {
+	display: block;
+}
+
+/*-----|| textarea global ||-----*/
+.JM_obj-fm-area {
+	display: block;
+}
+
+/*-----|| select global ||-----*/
+.JM_obj-fm-select {
+	display: block;
+}
+
+/*-----|| checkbox global ||-----*/
+.JM_obj-fm-check {
+	display: block;
+}
+
+/*-----|| radio global ||-----*/
+.JM_obj-fm-radio {
+	display: block;
+}
+
+/*-----|| ui objects ||--------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------*/
+
+/*-----|| button ||-----*/
+.JM_obj-ui-btn {
+	
+}
+
+/*-----|| element objects ||---------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------*/
+
+/*-----|| main logo ||-----*/
+.JM_obj-el-logo {
+	
+}
+
+/*-----|| effect objects ||----------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------*/
+
+/*-----|| animate background ||-----*/
+.JM_obj-efx-animbg {
+	-webkit-transition: background-position 0.2s ease-out;
+	-moz-transition: background-position 0.2s ease-out;
+	-o-transition: background-position 0.2s ease-out;
+	-ms-transition: background-position 0.2s ease-out;
+	transition: background-position 0.2s ease-out;
+}
+
+/*-----|| modules ||-----------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------*/
+
+/*-----|| module main navigation ||-----*/
+.JM_mod-mn {
+	
+}
+
+.JM_mod-mn ul {
+	
+}
+
+/*-----|| module sub navigation ||-----*/
+.JM_mod-sn {
+	
+}
+
+.JM_mod-sn ul {
+	
+}
+
+/*------------------------------- print START ---------------------------------------*/
+@media print {
+	/*------------------------------- print START ---------------------------------------*/
+	/*-----|| reset browser defaults ||--------------------------------------------------*/
+	/*-----------------------------------------------------------------------------------*/
+	* { /* resets all predefined values to 0 */
+		margin: 0;
+		padding: 0;
+	}
+	body {
+		background: #fff !important;
+	}
+	table {
+		border-collapse: collapse;
+		border-spacing: 0;
+	}
+	fieldset,img,abbr,acronym {
+		border: 0;
+	}
+	address,caption,cite,code,dfn,em,var {
+		font-style: normal;
+		font-weight: normal;
+	}
+	caption,th {
+		text-align: left;
+	}
+
+	/*-----|| predefined styles ||-------------------------------------------------------*/
+	/*-----------------------------------------------------------------------------------*/
+	.clear { /* clearing floats within html-code about the <br /> tag */
+		clear: both;
+		height: 0;
+		font-size: 0;
+	}
+	.clearfix:after {
+		/* clearfix-method without additional markup. needs surrounding element. */
+		content: ".";
+		display: block;
+		height: 0;
+		clear: both;
+		visibility: hidden;
+	}
+	.clearfix {
+		display: block;
+	}
+	hr {
+		clear: both;
+		display: block;
+		margin: 15px 0;
+		height: 1px;
+		line-height: 1px;
+		font-size: 1px;
+	}
+	.JM_invisible { /* makes elements invisible but readable */
+		position: absolute;
+		left: -1000em;
+	}
+
+	/*-----|| hide areas ||--------------------------------------------------------------*/
+	/*-----------------------------------------------------------------------------------*/
+	.JM_loremipsum {
+		display: none;
+	}
+
+	/*-----|| global font definitions ||-------------------------------------------------*/
+	/*-----------------------------------------------------------------------------------*/
+	* { /* basic font family/groundcolor */
+		color: #000;
+		font: 12pt Georgia, "Times New Roman", serif;
+		/* Zeichensatz auf Serifen umstellen */
+		/*quotes: "\201E" "\201C" "\201A" "\2018";*/
+	}
+	h1,h2,h3,h4,h5,h6 { /* no page-break after headings */
+		page-break-after: avoid;
+	}
+	a:link,a:visited,a:active,a:focus { /* basic link groundcolor */
+		text-decoration: underline;
+	}
+	a[href]:after { /* set urls visible after links --> modern browsers */
+		content: " <" attr(href) ">";
+		background-color: inherit;
+		color: #369;
+		font-style: italic;
+	}
+	abbr[title]:after,acronym[title]:after {
+		/* set text of acronyms visible --> modern browsers */
+		content: '(' attr(title) ')';
+		background-color: inherit;
+		color: #369;
+		font-style: italic;
+	}
+	*[cite]:after {
+		content: close-quote " (Quelle: " attr(cite) ")";
+	}
+	q:before,blockquote:before {
+		content: open-quote;
+	}
+	q:after,blockquote:after {
+		content: close-quote;
+	}
+
+	/*-----|| area document ||-----------------------------------------------------------*/
+	/*-----------------------------------------------------------------------------------*/
+	.JM_area-dc {
+		width: 100% !important;
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+
+	/*-----|| area content ||------------------------------------------------------------*/
+	/*-----------------------------------------------------------------------------------*/
+	.JM_area-ct {
+		
+	}
+	/*------------------------------- print END -----------------------------------------*/
+}
+/*------------------------------- print END -----------------------------------------*/

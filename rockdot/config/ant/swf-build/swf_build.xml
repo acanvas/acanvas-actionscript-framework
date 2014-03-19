@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Flash Build" default="">
+	
+
+	<target name="swf_build_subtask_swf">
+		<if>
+			<equals arg1="${project.compile.usefdt}" arg2="false" />
+			<!--
+			
+			NOTE: FDT compilation won't work with AIR SDK Compiler.
+			FIXME: Change fdt.launch.application to fdt.invoke.launchConfiguration (http://fdt.powerflasher.com/docs/FDT_Ant_Tasks#fdt.invoke.launchConfiguration_.28FDT_5.5.29) 
+			
+			-->
+			<then>
+				<echo>Compiling with AXMLC</echo>
+				<!--<antcall target="collectClasspath" />-->
+				<exec executable="${flash.amxmlc}" dir="." failonerror="true">
+					<arg line="-load-config+=${flash.file.includeconfig}" />
+					<arg line="-source-path ${flash.src.rockdot} ${flash.src.project}" />
+					<arg line="-library-path ${global.dir.air}/frameworks/libs/air/aircore.swc ${global.dir.air}/frameworks/libs/air/airglobal.swc ${flash.swc.rockdot} ${flash.swc.project}" />
+					<arg line="-target-player=${version}" />
+					<arg line="-default-frame-rate ${flash.framerate}" />
+					<arg line="-default-size ${width} ${height}" />
+					<arg line="-default-background-color ${flash.bgcolor}" />
+					<arg line="-actionscript-file-encoding=UTF-8" />
+					<arg line="-keep-generated-actionscript=false" />
+					<arg line="-keep-as3-metadata+=${flash.metadata}" />
+					<arg line="-use-network=false" />
+					<arg line="${global.telemetry}" />
+					<arg line="-debug=${project.compile.debug}" />
+					<arg line="-output '${target}/${flash.file.output}'" />
+					<arg line="-link-report ${flash.file.linkreport}" />
+					<arg line="-size-report ${flash.file.sizereport}" />
+					<arg line="${entrypoint}" />
+				</exec>
+			</then>
+			<else>
+				<echo>Compiling with FDT</echo>
+				<fdt.launch.application projectname="${FDTProject}" mainclass="${entrypoint}" compilerarguments="
+						-load-config=${FDTProjectPath}/${flash.file.includeconfig} 
+						-static-link-runtime-shared-libraries=true 
+						-warn-no-constructor=false
+						-library-path+='${FDTProjectSdkPath}/frameworks/locale/en_US' 
+						-target-player=${FDTProjectPlayerVersion} 
+						-default-frame-rate ${flash.framerate}
+						-default-size=${width},${height} 
+						-default-background-color ${flash.bgcolor}
+						-actionscript-file-encoding=UTF-8
+						-keep-generated-actionscript=false
+						-keep-as3-metadata+=${flash.metadata}
+						-use-network=false
+						${global.telemetry}
+						-link-report ${FDTProjectPath}/${flash.file.linkreport}
+						-size-report ${FDTProjectPath}/${flash.file.sizereport}
+					" debug="${project.compile.debug}" target="${target}/${flash.file.output}" startswf="false" swflauncher="Browser" swflocation="target/www/index-local.html" height="${height}" width="${width}" />
+			</else>
+		</if>
+		<echo message="SWF Build Finished" />
+	</target>
+
+</project>

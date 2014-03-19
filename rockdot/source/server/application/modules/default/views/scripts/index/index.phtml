@@ -1,0 +1,86 @@
+<?php 
+	$configuration = Zend_Registry::get('Application_Config');
+	$configuration_locale = Zend_Registry::get('Application_Config_Locale');
+	$jvm_registry = JVM_Registry::getInstance();
+?>
+<!-- flash START -->
+<div
+	id="JM_flashContent">
+	<!-- HTML Alternative Content START -->
+	<div class="JM_areaDc" id="JM_areaDc">
+		<div id="wrapper">
+			<img id="background" src="assets/images/html/JM_bg.jpg" alt="" />
+		</div>
+	</div>
+	<!-- HTML Alternative Content END -->
+</div>
+
+<script type="text/javascript">
+<!--
+
+/* ### FB INIT CALLBACK ################################# */
+
+window.fbAsyncInit = function() {
+	if(swfobject.hasFlashPlayerVersion("<?php echo $configuration->flash->version->player ?>")  == false){
+		Modernizr.load([
+            {
+                load:['assets/js/lib/jquery.min.js',
+                      'assets/js/lib/jquery.plugins.min.js', 
+      				  'assets/js/lib/jquery.jqplugin.1.0.2.min.js']
+            },
+            'assets/js/JM_global.js'
+        ]);
+	}
+	else{
+		Modernizr.load([
+            {
+                load:['assets/js/lib/jquery.min.js', 
+	                      'assets/js/JM_global.js'],
+	                complete: function(){
+	                	embedSWF();
+	  	        }
+            }
+        ]);
+	}
+}
+
+/* ### METHODS ################################# */
+
+function embedSWF() {
+		
+	var flashvars = {}; 
+    flashvars["debug"] 				= <?php echo $configuration->flash->debug ? 'true' : 'false' ?>; 
+    flashvars["local"] 				= <?php echo $configuration->flash->mode == "local" ? 'true' : 'false' ?>;
+    
+    flashvars["language"] 			= "<?php echo $jvm_registry->get('language') ?>";
+    flashvars["country"] 			= "<?php echo $jvm_registry->get('country') ?>";
+    flashvars["locale"] 			= "<?php echo $jvm_registry->get('locale') ?>";
+    
+    flashvars["host_frontend"] 		= "<?php echo $this->baseUrl('/') ?>";
+    flashvars["version"] 			= "<?php echo $configuration->flash->version->app ?>";
+    flashvars["swf_name"] 			= "JM_flashContent";
+    flashvars["protocol"] 			= "<?php echo $jvm_registry->get('protocol') ?>";
+    flashvars["app_data"] 			= "<?php echo $jvm_registry->get('app_data') ?>"; 
+
+    var params = {};
+    params.wmode 					= "<?php echo $configuration->flash->wmode ?>";
+    params.allowscriptaccess 		= "always"; 
+    
+    var attributes = {};
+    attributes.id 					= flashvars["swf_name"];
+    attributes.name 				= flashvars["swf_name"]; 
+    
+	swfobject.embedSWF(
+		flashvars["host_frontend"] + "<?php echo $configuration->flash->swf ?>?no_cache=" + Math.random()
+		, flashvars["swf_name"]
+		, "<?php echo $configuration->flash->css->width ?>"
+		, "<?php echo $configuration->flash->css->height ?>"
+		, "<?php echo $configuration->flash->version->player ?>"
+		, "assets/swf/expressInstall.swf"
+		, flashvars, params, attributes);
+}
+
+//-->
+</script>
+
+<!-- flash END -->

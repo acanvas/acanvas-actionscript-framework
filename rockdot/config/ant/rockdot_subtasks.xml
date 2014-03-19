@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- NOTE
+These subtasks are imported into the master project. 
+Basedir is the directory of the master project.
+ -->
+<project name="Subtasks" default="">
+	<taskdef name="ftp" classname="org.apache.tools.ant.taskdefs.optional.net.FTP" />
+	<taskdef resource="net/sf/antcontrib/antlib.xml" />
+	<taskdef name="fileutil" classname="ise.antelope.tasks.FileUtilTask" />
+
+	<condition property="is_fdt">
+		<typefound name="fdt.loadProjectProperties" />
+	</condition>
+	<if>
+		<typefound name="fdt.loadProjectProperties" />
+		<then>
+			<fdt.loadProjectProperties />
+		</then>
+	</if>
+
+	<property name="platforms.folder" location="platforms" />
+	<property name="config.folder" location="config" />
+
+	<property file="${global.dir.rockdot}/config/ant/swf-build/swf.properties" />
+
+	<import file="${global.dir.rockdot}/config/ant/swf-build/swf_build.xml" />
+	<import file="${global.dir.rockdot}/config/ant/context-import/ant_context_import.xml" />
+	<import file="${global.dir.rockdot}/config/ant/classpath-import/ant_classpath_import.xml" />
+	<import file="${global.dir.rockdot}/config/ant/include-assets/ant_include_assets.xml" />
+	<import file="${global.dir.rockdot}/config/ant/embed-fonts/ant_embed_fonts.xml" />
+	<import file="${global.dir.rockdot}/config/ant/asdoc/asdoc.xml" />
+
+	<import file="${global.dir.rockdot}/config/ant/create-plugin/create_plugin.xml" />
+
+	<filterset id="copyfilterset">
+		<filtersfile file="${global.dir.rockdot}/config/ant/global.properties" />
+		<filtersfile file="${config.folder}/project.${global.environment}.properties" />
+		<filtersfile file="${config.folder}/accounts.${global.environment}.properties" />
+		<filtersfile file="${platforms.folder}/html/html.properties" />
+		<filtersfile file="${global.dir.rockdot}/config/ant/swf-build/swf.properties" />
+	</filterset>
+
+	<!-- ######################################
+				PRIVATE TARGETS
+		###################################### -->
+	<target name="project_build_subtask">
+
+		<mkdir dir="assembly/reports" />
+
+		<antcall target="collectClasspath" />
+		<property file="${flash.file.classpath.rockdot}" />
+		<property file="${flash.file.classpath.project}" />
+
+		<antcall target="collectAppContext" />
+		<antcall target="swf_build_subtask_swf" />
+
+		<antcall target="prepare_target_dir">
+			<param name="target" value="${target}/${project.appversion}" />
+		</antcall>
+
+		<echo message="Project Build Finished" />
+	</target>
+
+	<target name="swf_build_subtask" depends="">
+		<antcall target="swf_build_subtask_swf" inheritall="true" />
+	</target>
+
+	<target name="_start_debugger">
+		<if>
+			<equals arg1="${is_fdt}" arg2="true" />
+			<then>
+				<fdt.startDebugger projectname="${FDTProject}" />
+			</then>
+			<else>
+				<echo>FDT Debugger not found.\n Starting App anyways.</echo>
+				<echo message="If you use FDT, remember to check 'Use same JRE' in External Tools Dialog" />
+			</else>
+		</if>
+	</target>
+
+	<target name="_start_profiler">
+		<if>
+			<equals arg1="${is_fdt}" arg2="true" />
+			<then>
+				<fdt.startProfiler collectstackdata="true" filterinternalpackages="true" memoryprofilingenabled="true" performanceprofilingenabled="false" projectname="${FDTProject}" targetswf="${file}" />
+			</then>
+			<else>
+				<echo>FDT Debugger not found.\n Starting App anyways.</echo>
+			</else>
+		</if>
+	</target>
+
+
+	<!-- ######################################
+			PRIVATE METHODS
+		###################################### -->
+
+	<target name="prepare_target_dir">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${target}" includes="**/*" />
+		</delete>
+
+		<copy todir="${target}" encoding="UTF-8" flatten="true" failonerror="false">
+			<fileset dir="${flash.dir.src}">
+				<include name="**/project/*.properties" />
+				<include name="**/bootstrap/*.properties" />
+			</fileset>
+			<fileset file="assembly/flash/${flash.file.context}" />
+			<fileset file="${config.folder}/project.${global.environment}.properties" />
+			<filterset refid="copyfilterset" />
+		</copy>
+		<move file="${target}/project.${global.environment}.properties" tofile="${target}/project.properties" />
+	</target>
+
+	<target name="copy_and_replace_tokens">
+		<copy todir="${target}" encoding="${encoding}" preservelastmodified="true">
+			<fileset dir="${src}" includes="**/*" excludes="config/, **/*.cache,**/*.png,**/*.jpg,**/*.gif,**/*.awd" />
+			<filterset refid="copyfilterset" />
+		</copy>
+		<copy todir="${target}" encoding="ISO-8859-1" preservelastmodified="true">
+			<fileset dir="${src}" includes="**/*.png,**/*.jpg,**/*.gif,**/*.awd" />
+		</copy>
+	</target>
+
+
+	<target name="ftp_upload">
+		<echo>${host}</echo>
+		<ftp verbose="yes" passive="yes" depends="yes" timediffauto="true" remotedir="${remotedir}" server="${host}" userid="${user}" password="${password}">
+			<fileset dir="${localdir}">
+				<!--
+				<include name="**/*.js" />
+				<include name="**/*.htm" />
+				<include name="**/*.html" />
+				<include name="**/*.php" />
+				<include name="**/*.css" />
+				<include name="**/*.jpg" />
+				<include name="**/*.gif" />
+				<include name="**/*.png" />
+				<include name="**/*.swf" />
+				<include name="**/*.xml" />
+				<include name="**/*.properties" />
+				<include name="**/*.flv" />
+				<include name="**/*.f4v" />
+				<exclude name="**/Zend/**" />
+				-->
+				<exclude name="**/*.cache" />
+				<exclude name="**/mysql/**" />
+				<exclude name="**/old/**" />
+			</fileset>
+		</ftp>
+
+	</target>
+
+</project>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<objects xmlns="http://www.springactionscript.org/schema/objects"
+		 xmlns:rockdot="http://www.sounddesignz.com/schema/rockdot"
+		 xmlns:mad="http://www.sounddesignz.com/schema/mad"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.springactionscript.org/schema/objects http://www.sounddesignz.com/schema/spring/spring-actionscript-objects-2.0.xsd 
+					http://www.sounddesignz.com/schema/mad http://www.sounddesignz.com/schema/mad/madcomponents-rockdot-1.0.xsd 
+					http://www.sounddesignz.com/schema/rockdot http://www.sounddesignz.com/schema/rockdot/spring-actionscript-rockdot-2.0.xsd">
+
+	<!-- ########################################################################################## 
+		Application Context // context-displaylist.xml ########################################################################################## -->
+	<property file="@project.appversion@/@@language@@.properties" />
+
+	<!-- UI Plugin -->
+	<object id="plugin_ui" class="com.rockdot.plugin.screen.ScreenDisplaylistPlugin"
+		scope="singleton"></object>
+
+	<rockdot:screen id="screen.home"
+		tree_order="0" 
+		tree_parent="0" 
+		transition="transition.default"
+		class="com.rockdot.project.view.screen.Home" >
+	</rockdot:screen>
+	
+	<rockdot:screen id="screen.picker" tree_order="5" tree_parent="1"
+		transition="transition.default" class="com.rockdot.project.view.screen.Picker">
+		<mad:madscreen>
+			<mad:vertical background="#CCCCCC,#BBBBBB,4">
+				<mad:label>
+					<mad:font color="#FFFFFF" />
+					${screen.picker.title}
+				</mad:label>
+				<mad:line />
+				<mad:columns widths="5%,90%,5%">
+					<mad:image />
+					<mad:columns alignV="centre" gapH="0" id="columns0">
+						<mad:picker id="picker0" background="#FFFFCC">
+							<data>
+								<Apple />
+								<Orange />
+								<Banana />
+								<Lemon />
+								<Mango />
+								<Plum />
+								<Cherry />
+								<Lime />
+								<Peach />
+								<Melon />
+							</data>
+						</mad:picker>
+						<mad:picker id="picker1">
+							<data>
+								<Apple />
+								<Orange />
+								<Banana />
+								<Lemon />
+								<Mango />
+								<Plum />
+								<Cherry />
+								<Lime />
+								<Peach />
+								<Melon />
+							</data>
+						</mad:picker>
+						<mad:picker id="picker2">
+							<data>
+								<Apple />
+								<Orange />
+								<Banana />
+								<Lemon />
+								<Mango />
+								<Plum />
+								<Cherry />
+								<Lime />
+								<Peach />
+								<Melon />
+							</data>
+						</mad:picker>
+					</mad:columns>
+					<mad:image />
+				</mad:columns>
+			</mad:vertical>
+		</mad:madscreen>
+	</rockdot:screen>
+
+	<rockdot:screen id="screen.components" tree_order="5"
+		tree_parent="1" transition="transition.default"
+		class="com.rockdot.project.view.screen.Components">
+
+		<mad:madscreen>
+			<mad:vertical background="#666666,#333333">
+				<mad:label>
+					<mad:font color="#FFFFFF" />
+					${screen.components.title}
+				</mad:label>
+				<mad:line />
+				<mad:columns id="columns1">
+					<mad:vertical>
+						<mad:input alignH="fill" prompt="${screen.components.fillinput}" />
+						<mad:horizontal>
+							<mad:vertical>
+								<mad:checkBox />
+								<mad:checkBox />
+							</mad:vertical>
+							<mad:vertical>
+								<mad:switch alignH="fill" background="#FF8000">${screen.components.switch}</mad:switch>
+								<mad:button alignH="fill">${screen.components.button}</mad:button>
+							</mad:vertical>
+						</mad:horizontal>
+						<mad:slider id="slider" background="#FF9966" />
+						<mad:progressBar id="progressBar" />
+					</mad:vertical>
+					<mad:vertical alignH="fill">
+						<mad:switch alt="true" alignH="right" />
+						<mad:segmentedControl background="#CCCCCC,#336633">
+							<mad:data>
+								<mad:one />
+								<mad:two />
+							</mad:data>
+						</mad:segmentedControl>
+						<mad:radioButton>
+							<mad:font color="#FFFFFF" />
+							${screen.components.radiobutton}
+						</mad:radioButton>
+						<mad:radioButton>
+							<mad:font color="#FFFFFF" />
+							${screen.components.radiobutton}
+						</mad:radioButton>
+						<mad:popUpButton id="popupButton" value="${screen.components.popupbutton}" />
+					</mad:vertical>
+				</mad:columns>
+			</mad:vertical>
+		</mad:madscreen>
+	</rockdot:screen>
+
+	<rockdot:screen id="screen.list" tree_order="5" tree_parent="1"
+		transition="transition.default" class="com.rockdot.project.view.screen.List">
+		<mad:madscreen>
+			<mad:dividedList id="list" colour="#666677" background="#EEEEFF,#FFFFFF,#EEEEFF"
+				headingTextColour="#EEEEFF" headingShadowColour="#333344" mask="true">
+				<mad:horizontal>
+					<mad:image id="image">48</mad:image>
+					<mad:vertical>
+						<mad:label id="label">
+							<mad:font size="18" />
+						</mad:label>
+						<mad:label id="label2">
+							<mad:font color="#666666" size="11" />
+						</mad:label>
+					</mad:vertical>
+				</mad:horizontal>
+			</mad:dividedList>
+		</mad:madscreen>
+	</rockdot:screen>
+
+	<rockdot:screen id="screen.charts" tree_order="5" tree_parent="1"
+		transition="transition.default" class="com.rockdot.project.view.screen.Charts">
+		<mad:madscreen>
+			<mad:vertical background="#CCCC99,#CCCCCC,6">
+				<mad:label>
+					<mad:font color="#FFFFFF" />
+					${screen.charts.title}
+				</mad:label>
+				<mad:line />
+				<mad:columns>
+					<mad:pieChart alignV="centre">
+						<mad:colours>#99FF99,#CC9999,#9999CC,#CCCC66,#CC9966</mad:colours>
+						<mad:data>3,5,4,2,1</mad:data>
+					</mad:pieChart>
+					<mad:barChart alignV="centre" render="2d" stack="true" order="rows"
+						palette="subtle">
+						<mad:data>
+							<mad:row>1,2,3,4</mad:row>
+							<mad:row>3,8,4,1</mad:row>
+							<mad:row>4,1,5,12</mad:row>
+						</mad:data>
+					</mad:barChart>
+				</mad:columns>
+			</mad:vertical>
+		</mad:madscreen>
+	</rockdot:screen>
+	
+	<rockdot:screen id="screen.screenflip" tree_order="6" tree_parent="1"
+		transition="transition.default" class="com.rockdot.project.view.screen.PageFlippingDemo">
+	</rockdot:screen>
+
+	<!-- Page Transition Effects -->
+	<rockdot:transition id="transition.default" class="com.rockdot.library.view.effect.HLeftSwipeTransition" duration="0.5" initialAlpha="0" type="UIConstants.TRANSITION_PARALLEL"/>
+	
+</objects>

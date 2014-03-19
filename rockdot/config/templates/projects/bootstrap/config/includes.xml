@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="RockdotHelper Includes" default="" basedir="../">
+	<dirname file="${basedir}" property="temp.dir.project" />
+	<property name="global.dir.rockdot" value="${temp.dir.project}/rockdot"/>
+	
+	<property file="config/global.properties" />
+	<property file="config/project.${global.environment}.properties" />
+	<property file="config/accounts.${global.environment}.properties" />
+
+
+	<import file="${global.dir.rockdot}/config/ant/rockdot_subtasks.xml" />
+
+	<property name="dir.www.source.html" value="${global.dir.rockdot}/source/html" />
+	<property name="dir.www.source.assets" value="${global.dir.rockdot}/source/server/public/assets" />
+
+	<!-- Generate Assets.as Class from source/flash/resources/images Directory -->
+	<target name="assets" description="Scans a folder and puts the pngs it contains into Assets.as" depends="include_assets" />
+
+	<!-- Generate Fonts.as Class from source/flash/resources/fonts Directory -->
+	<target name="fonts" description="Scans a folder and compiles the fonts it contains into SWC's" depends="embed_fonts" />
+
+</project>

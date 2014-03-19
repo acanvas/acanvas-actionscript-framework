@@ -1,0 +1,20 @@
+# Binary Folders
+bin/
+
+# Eclipse and FDT files and folders
+.settings/
+.project
+
+#IntelliJ IDEA files and folders
+.idea/
+rockdot.imi
+
+#OSX specific
+**/.DS_Store
+
+#developer stuff
+config/docs/
+config/templates/native-extensions/
+
+#private ios keys
+**/ios/keys/**

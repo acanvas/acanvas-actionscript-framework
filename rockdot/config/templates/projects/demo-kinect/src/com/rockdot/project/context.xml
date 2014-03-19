@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<objects xmlns="http://www.springactionscript.org/schema/objects"
+		 xmlns:rockdot="http://www.sounddesignz.com/schema/rockdot"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.springactionscript.org/schema/objects 
+					http://www.springactionscript.org/schema/objects/spring-actionscript-objects-2.0.xsd 
+					http://www.sounddesignz.com/schema/rockdot/spring-actionscript-rockdot-2.0.xsd">
+
+	<!--
+		##########################################################################################
+		 Application Context // application-context.xml
+		##########################################################################################
+	-->
+	<property file="v1/@@language@@.properties" />
+	
+	<!-- UI Plugin -->
+	<object id="plugin_ui" class="com.rockdot.plugin.screen.ScreenDisplaylistPlugin" scope="singleton"></object>
+	
+	<!-- Screen Transition Effects -->
+	<rockdot:transition id="transition.default" class="com.rockdot.library.view.effect.HLeftSwipeTransition" duration="0.5" initialAlpha="0" type="UIConstants.TRANSITION_PARALLEL"/>
+	
+	<!-- Screens -->
+	<rockdot:screen id="screen.home"
+		tree_order="1" 
+		tree_parent="0" 
+		transition="transition.default" 
+		class="com.rockdot.project.view.screen.Home" >
+	</rockdot:screen>
+	
+
+	<rockdot:screen id="screen.demo"
+		tree_order="2" 
+		tree_parent="1" 
+		transition="transition.default" 
+		class="com.rockdot.project.view.screen.AIRKinectExamples" >
+	</rockdot:screen>
+	
+	<rockdot:screen id="screen.book"
+		tree_order="3" 
+		tree_parent="1" 
+		transition="transition.default" 
+		class="com.rockdot.project.view.screen.Book" >
+	</rockdot:screen>
+	
+	<rockdot:screen id="screen.book.kinect.depth"
+		tree_order="4" 
+		tree_parent="1" 
+		transition="transition.default" 
+		class="com.rockdot.project.view.screen.BookWithKinectDepth" >
+	</rockdot:screen>
+	
+	<rockdot:screen id="screen.book.kinect.skeleton"
+		tree_order="5" 
+		tree_parent="1" 
+		transition="transition.default" 
+		class="com.rockdot.project.view.screen.BookWithKinectSkeleton" >
+	</rockdot:screen>
+	
+	<rockdot:screen id="screen.book.kinect.pointcloud"
+		tree_order="6" 
+		tree_parent="1" 
+		transition="transition.default" 
+		class="com.rockdot.project.view.screen.BookWithKinectPointCloud" >
+	</rockdot:screen>
+	
+	<rockdot:screen id="screen.pointlight.kinect"
+		tree_order="6" 
+		tree_parent="1" 
+		transition="transition.default" 
+		class="com.rockdot.project.view.screen.PointLightWithKinectDepth" >
+	</rockdot:screen>
+
+	<rockdot:screen id="screen.pointlight.facetracking"
+		tree_order="8" 
+		tree_parent="1" 
+		transition="transition.default" 
+		class="com.rockdot.project.view.screen.PointLightWithFaceTracker" >
+	</rockdot:screen>
+
+</objects>

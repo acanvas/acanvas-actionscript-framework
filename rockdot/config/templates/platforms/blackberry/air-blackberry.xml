@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<application xmlns="http://ns.adobe.com/air/application/3.5">
+	<allowBrowserInvocation>true</allowBrowserInvocation>
+	<id>@project.id@</id>
+	<versionNumber>0.1</versionNumber>
+	<filename>@flash.file.name@.bar</filename>
+
+	<description>
+		<text xml:lang="en">This is an example.</text>
+		<text xml:lang="de">Beispiel-Beschreibung.</text>
+	</description>
+
+	<name>
+		<text xml:lang="en">@project.title@</text>
+		<text xml:lang="de">@project.title@</text>
+	</name>
+	<copyright>@project.author@</copyright>
+	<!-- Settings for the application's initial window. Required. -->
+	<initialWindow>
+		<content>@flash.file.name@.swf</content>
+		<systemChrome>none</systemChrome>
+		<visible>true</visible>
+		<autoOrients>true</autoOrients>
+		<aspectRatio>portrait</aspectRatio>
+		<transparent>false</transparent>
+		<fullScreen>true</fullScreen>
+		<renderMode>direct</renderMode>
+		<maximizable>true</maximizable>
+		<minimizable>true</minimizable>
+		<resizable>true</resizable>
+		<depthAndStencil>true</depthAndStencil>
+	</initialWindow>
+	<extensions>
+		<extensionID>qnx.fuse.ui.skins.QNXSkins</extensionID>
+	</extensions>
+</application>

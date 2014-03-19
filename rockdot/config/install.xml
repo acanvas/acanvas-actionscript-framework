@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Rockdot Installation" default="install" basedir="../">
+
+	<taskdef resource="net/sf/antcontrib/antlib.xml" />
+	<taskdef name="fileutil" classname="ise.antelope.tasks.FileUtilTask" />
+
+	<condition property="is_mac">
+		<os family="mac" />
+	</condition>
+
+	<condition property="is_win">
+		<os family="windows" />
+	</condition>
+
+	<!-- ######################################
+			Download and unzip SDK's of Flex, AIR, Android, and Blackberry
+		###################################### -->
+
+	<target name="install" description="Download and unzip SDK's of Flex, AIR, Android, and Blackberry">
+		<antcall target="_install">
+			<param name="target" value="AIRSDK_Compiler" />
+			<!-- executed on mac -->
+			<param name="compression" value="bz2" if="is_mac" />
+			<param name="url" value="http://airdownload.adobe.com/air/mac/download/latest/AIRSDK_Compiler.tbz2" if="is_mac" />
+			<!-- executed on windows -->
+			<param name="compression" value="bz2" if="is_win" />
+			<param name="url" value="http://airdownload.adobe.com/air/win/download/latest/AIRSDK_Compiler.zip" if="is_win" />
+		</antcall>
+		<antcall target="_install">
+			<param name="target" value="adb" />
+			<param name="compression" value="zip" />
+			<param name="url" value="http://sounddesignz.com/downloads/adb.zip" />
+		</antcall>
+		<antcall target="_install">
+			<param name="target" value="mamp" />
+			<param name="compression" value="zip" />
+			<param name="url" value="http://sounddesignz.com/downloads/MAMP_2.1.4.pkg.zip" if="is_mac" />
+			<param name="url" value="http://downloads.sourceforge.net/project/xampp/XAMPP%20Windows/1.8.3/xampp-win32-1.8.3-3-VC11.zip" if="is_win" />
+		</antcall>
+		<input defaultvalue="OK" validargs="OK">MANDATORY if you do not already have MAMP installed: Go to bin/mamp/ and install.</input>
+
+		<!--
+		<antcall target="_download_blackberry" />
+		-->
+		<antcall target="_download_zend" />
+	</target>
+
+	<target name="_test" description="">
+		<if>
+			<typefound name="fdt.loadProjectProperties"/>
+			<then>
+				<echo>fdt.loadProjectProperties exists</echo>
+			</then>
+		</if>
+	</target>
+
+	<target name="_install">
+		<condition property="dir.exists">
+			<available file="bin/${target}" type="dir" />
+		</condition>
+		<if>
+			<equals arg1="${dir.exists}" arg2="true" />
+			<then>
+				<echo>${target} already installed or prepared. Skipping.</echo>
+			</then>
+			<else>
+				<echo>Downloading and Installing ${target}. This might take some time. BE PATIENT, MAN!</echo>
+				<get src="${url}" dest="bin/${target}.zip" verbose="off" />
+				<mkdir dir="bin/${target}" />
+				<if>
+					<equals arg1="${compression}" arg2="bz2" />
+					<then>
+						<!-- fyi: using system tar b/c untar task with bzip option produces wrong dir structure. -->
+						<exec executable="tar" failonerror="true">
+							<arg line="jxvf" />
+							<arg line="bin/${target}.zip" />
+							<arg line="-C bin/${target}/" />
+						</exec>
+					</then>
+					<else>
+						<unzip src="bin/${target}.zip" dest="bin/${target}" />
+					</else>
+				</if>
+				<!--<delete file="bin/${target}.zip" />-->
+				<echo>Installed ${target}.</echo>
+			</else>
+		</if>
+	</target>
+
+	<target name="_download_blackberry">
+		<condition property="dir.exists">
+			<available file="bin/blackberry-tablet-sdk-3.2.1" type="dir" />
+		</condition>
+		<if>
+			<equals arg1="${dir.exists}" arg2="true" />
+			<then>
+				<echo>blackberry-tablet-sdk-3.2.1 already installed. Skipping.</echo>
+			</then>
+			<else>
+				<echo>Downloading blackberry-tablet-sdk-3.2.1 (140mb).</echo>
+				<get src="http://developer.blackberry.com/air/downloads/fetch/BlackBerry-Air-SDK-Installer-3.2.1-Mac-201308061650.dmg" dest="bin" verbose="off" />
+				<input defaultvalue="OK" validargs="OK">If you require Blackberry support, go to /bin folder and install BlackBerry-Air-SDK-Installer-3.2.1-Mac-201308061650.dmg into /bin folder. A subfolder bin/blackberry-tablet-sdk-3.2.1 wil be created.</input>
+			</else>
+		</if>
+	</target>
+
+	<target name="_download_zend">
+		<condition property="file.exists">
+			<available file="bin/zend.zip" type="file" />
+		</condition>
+		<if>
+			<equals arg1="${file.exists}" arg2="true" />
+			<then>
+				<echo>Zend already downloaded. Skipping.</echo>
+			</then>
+			<else>
+				<echo>Downloading Zend (8mb).</echo>
+				<get src="http://sounddesignz.com/downloads/Zend-1.12.1.zip" dest="bin/zend.zip" verbose="off" />
+				<echo>
+					Zend support prepared.</echo>
+			</else>
+		</if>
+	</target>
+</project>

@@ -1,0 +1,3 @@
+package com.rockdot.plugin.facebook.model.vo {	import com.rockdot.core.RockdotVO;	public class FBAlbumVO extends RockdotVO	{		public var id:String;		public var from : String;		public var name:String;		public var description : String;		public var location : String;		public var link : String;		public var privacy : String;		public var count : String;		public var created_time : String;		public var updated_time : String;		public function FBAlbumVO(obj : Object = null) {			 super(obj); 
+		}
+	}}

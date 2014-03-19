@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Android Build" default="build" basedir="../../">
+	<import file="../../config/includes.xml" />
+	<property name="dir.this" value="platforms/android" />
+	<property file="${dir.this}/android.properties" />
+
+	<!-- ###################################### Android: Prepare and Package ###################################### -->
+
+	<target name="build_swf">
+		<!-- CLEAN UP -->
+		<delete includeemptydirs="false" failonerror="false">
+			<fileset dir="${android.dir.build}" includes="**/*" />
+		</delete>
+		<mkdir dir="${android.dir.build}" />
+
+		<delete includeemptydirs="false" failonerror="false">
+			<fileset dir="${android.dir.target}" includes="**/*" />
+		</delete>
+		<mkdir dir="${android.dir.target}" />
+
+		<!-- COMPILE SWF -->
+		<antcall target="project_build_subtask">
+			<param name="target" value="${android.dir.build}" />
+			<param name="version" value="${android.playerversion}" />
+			<param name="width" value="${android.width}" />
+			<param name="height" value="${android.height}" />
+			<param name="entrypoint" value="${flash.file.entrypoint.preloader}" />
+			<param name="frametwo" value="${flash.entrypoint.application}" />
+		</antcall>
+
+		<!-- COPY ICONS (to /icons) -->
+		<copy todir="${android.dir.include}" encoding="ISO-8859-1" preservelastmodified="true">
+			<fileset dir="${dir.this}/resources/icons" includes="**/*.png" />
+		</copy>
+
+		<!-- COPY APP DESCRIPTOR (to root) -->
+		<copy todir="${android.dir.build}" encoding="${flash.encoding}" preservelastmodified="true">
+			<fileset file="${dir.this}/air-android.xml" />
+			<filterset refid="copyfilterset" />
+			<filterset>
+				<filtersfile file="${dir.this}/android.properties" />
+			</filterset>
+		</copy>
+
+
+		<echo message="Android Build - Finished" />
+
+	</target>
+
+	<target name="build" description="Build the App and Package as apk">
+		<antcall target="build_swf" />
+		<antcall target="build_app" />
+	</target>
+
+	<target name="build_swf_and_debug_local" description="Build the App and Debug">
+		<antcall target="build_swf" />
+		<antcall target="debug_local" />
+	</target>
+
+	<!-- ###################################### Private Method: Android Packager 
+		###################################### -->
+
+	<target name="build_app" depends="">
+		<echo message="Packaging Android APK" />
+
+		<exec executable="${air.adt}" dir="${android.dir.build}" failonerror="true">
+			<arg line="-package ${android.package}" />
+			<arg line="-target ${android.target}" />
+			<arg line="-listen 16000" />
+			<arg line="-storetype ${android.storetype}" />
+			<arg line="-keystore ${android.keystore}" />
+			<arg line="-storepass ${android.keypass}" />
+			<arg line="../../${android.file.apk}" />
+			<arg line="${android.file.descriptor}" />
+			<arg line="-extdir ${android.dir.extensions.packaged}" />
+			<!-- includes -->
+			<arg line="include" />
+			<arg line="${project.appversion}" />
+			<arg line="${flash.file.name}.swf" />
+		</exec>
+
+	</target>
+
+
+	<!-- ###################################### ANDROID DEBUG ###################################### -->
+	<target name="debug_local" description="Android Air Local Debug">
+		<echo message="Android Air Local Debug" />
+		<antcall target="_start_debugger" />
+
+		<exec executable="${air.adl}" dir="${android.dir.build}" failonerror="true">
+			<arg line="-extdir ${android.dir.extensions.unpackaged}/" />
+			<arg line="-profile ${android.adl.profile}" />
+			<arg line="-screensize ${android.width}x${android.height}:${android.width}x${android.height}" />
+			<arg line="${android.file.descriptor}" />
+		</exec>
+	</target>
+
+	<target name="profile_local" description="profile!">
+		<antcall target="_start_debugger" />
+		<antcall target="_start_profiler">
+			<param name="file" value="${android.dir.build}/${project.name}.swf" />
+		</antcall>
+
+		<exec executable="${air.adl}" dir="${android.dir.build}" failonerror="false">
+			<arg line="-extdir ${android.dir.extensions.unpackaged}/" />
+			<arg line="-profile ${android.adl.profile}" />
+			<arg line="-screensize ${android.width}x${android.height}:${android.width}x${android.height}" />
+			<arg line="${android.file.descriptor}" />
+		</exec>
+	</target>
+
+	<target name="debug_usb" description="debug android app">
+		<!-- NOTE: USB Debugging fdb commands http://help.adobe.com/en_US/air/build/WS901d38e593cd1bac7b2281cc12cd6bced97-8000.html  -->
+
+		<echo>Starting ADB Server...</echo>
+		<exec executable="${android.file.adb}" dir="." failonerror="true">
+			<arg line="start-server" />
+		</exec>
+
+		<sleep milliseconds="3000" />
+
+		<echo>Setting up Port Forwarding...</echo>
+		<exec executable="${android.file.adb}" dir="." failonerror="true">
+			<arg line="-d forward tcp:7936 tcp:16000" />
+		</exec>
+
+		<sleep milliseconds="1000" />
+
+		<echo>Starting ADT...</echo>
+		<exec executable="${air.adt}" dir="." failonerror="false">
+			<arg line="-launchApp" />
+			<arg line="-platform android" />
+			<arg line="-appid ${project.id}" />
+		</exec>
+
+		<sleep milliseconds="1000" />
+
+		<if>
+			<equals arg1="${is_fdt}" arg2="true" />
+			<then>
+				<fdt.startDebugger projectname="${FDTProject}" port="7936" asclient="true" />
+			</then>
+			<else>
+				<echo>FDT Debugger not found.\n Starting App anyways.</echo>
+			</else>
+		</if>
+
+	</target>
+
+	<target name="show_devices" description="Show Connected Android Devices">
+		<echo message="Showing Connected Android Devices" />
+		<exec executable="${air.adt}" dir="." failonerror="true">
+			<arg line="-devices" />
+			<arg line="-platform android" />
+		</exec>
+	</target>
+
+	<!-- ###################################### ANDROID INSTALLATION ###################################### -->
+	<target name="install_app_on_device" description="Install App on Android Device">
+		<echo message="Installing App on Android Device" />
+		<exec executable="${air.adt}" dir="." failonerror="true">
+			<arg line="-uninstallApp" />
+			<arg line="-platform android" />
+			<arg line="-appid ${project.id}" />
+		</exec>
+		<exec executable="${air.adt}" dir="." failonerror="true">
+			<arg line="-installApp" />
+			<arg line="-platform android" />
+			<arg line="-package ${android.file.apk}" />
+		</exec>
+	</target>
+
+
+	<!-- ###################################### PRIVATE METHODS ###################################### -->
+
+	<target name="air_selfsign">
+		<echo message="Self-Signing" />
+		<exec executable="${air.adt}" dir="${android.dir.build}" failonerror="true">
+			<arg line="-certificate" />
+			<arg line="-cn SelfSign" />
+			<arg line="-c US 1024-RSA" />
+			<arg line="${android.keystore}" />
+			<arg line="${android.keypass}" />
+		</exec>
+		<echo message="Mobile Application Signed" />
+	</target>
+
+
+</project>

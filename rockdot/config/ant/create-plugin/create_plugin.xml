@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Create Plugin" default="create_plugin">
+	<taskdef resource="net/sf/antcontrib/antlib.xml" />
+	<taskdef name="fileutil" classname="ise.antelope.tasks.FileUtilTask" />
+
+
+	<target name="create_plugin" description="awesome">
+
+		<!-- Prompt for Input and put result into property named "package" -->
+		<input addproperty="package" message="Enter Plugin Name (lowercase)" />
+		
+		<!-- Capitalize Input and put result into property named "class" -->
+		<capitalize input="${package}" property="class"/>
+
+
+		<copy todir="projects/flash/as3/com/rockdot/plugin/${package}/" overwrite="true">
+			<fileset dir="config/targets/create-plugin/classes/"/>
+			<filterset>
+				<filter token="plugin.package" value="${package}"/>
+				<filter token="plugin.class.prefix" value="${class}"/>
+			</filterset>
+		</copy>
+		
+		<for param="file">
+		  <path>
+		    <fileset dir="projects/flash/as3/com/rockdot/plugin/${package}/"/>
+		  </path>
+		  <sequential>
+		  	
+		    <propertyregex override="yes"
+		      property="newfilename"  input="@{file}"
+		      regexp="Name" replace="${class}"/>
+		  	
+		  	<move file="@{file}" tofile="${newfilename}"/>
+		  	
+		  </sequential>
+		</for>
+
+	</target>
+
+	<scriptdef name="capitalize" language="javascript">
+		<attribute name="input" />
+		<attribute name="property" />
+	       // getting the value
+	       var lowercaseValue = attributes.get("input");
+	 
+	       // the first character
+	       var ch = lowercaseValue.substring(0,1);
+	 
+	       // the rest of the value
+	       var rest = lowercaseValue.substring(1);
+	 
+	       // convert first character to uppercase
+	       var up = ch.toUpperCase();
+	 
+	       // concatenate the uppercase with the rest
+	       var uppercaseValue = up + rest;
+	 
+	       // store the result in a new property
+	       project.setNewProperty(attributes.get("property"), uppercaseValue);
+     </scriptdef>
+
+
+</project>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="HTML Build" default="" basedir="../../">
+	<import file="../../config/includes.xml" />
+	<property name="dir.this" value="platforms/html" />
+	<property file="${dir.this}/html.properties" />
+
+	<!-- ######################################
+			Compile and Upload
+		###################################### -->
+
+	<target name="compile_and_deploy" description="Copy and Upload">
+
+
+		<!-- compile swf and assemble files -->
+		<antcall target="compile" />
+
+		<!-- upload to server -->
+		<if>
+			<!-- In Local mode, we can omit the upload -->
+			<equals arg1="${global.environment}" arg2="local" />
+			<then>
+				<echo message="Dude, you're in local mode. I won't upload anything. Check config/global.properties" />
+			</then>
+			<!-- In all other modes, we have to upload -->
+			<else>
+				<input message="Are you sure you want to upload HTML to the +++${global.environment}+++ server? (y/n)" addproperty="i_am_sure_upload" defaultvalue="n" />
+				<if>
+					<equals arg1="${i_am_sure_upload}" arg2="n" />
+					<then>
+						<echo message="Thought so... :-)" />
+					</then>
+					<else>
+						<ftp verbose="yes" action="mkdir" remotedir="${accounts.ftp.remotedir}" server="${accounts.ftp.host}" userid="${accounts.ftp.user}" password="${accounts.ftp.pw}" />
+
+						<antcall target="ftp_upload">
+							<param name="host" value="${accounts.ftp.host}" />
+							<param name="user" value="${accounts.ftp.user}" />
+							<param name="password" value="${accounts.ftp.pw}" />
+							<param name="remotedir" value="${accounts.ftp.remotedir}" />
+							<param name="localdir" value="target/html" />
+						</antcall>
+					</else>
+				</if>
+			</else>
+		</if>
+	</target>
+
+
+	<!-- ######################################
+			SWF Operations
+		###################################### -->
+
+	<target name="compile_and_debug" description="Build the App" depends="compile, debug" />
+
+	<target name="compile">
+		<!-- Cleanup target dir (except library dir) -->
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="target/html" />
+		</delete>
+		<mkdir dir="target/html" />
+
+		<!-- Copy sources from this Project's source dir to target dir -->
+		<antcall target="copy_and_replace_tokens">
+			<param name="src" value="source/html" />
+			<param name="target" value="target/html" />
+			<param name="encoding" value="${flash.encoding}" />
+		</antcall>
+		<antcall target="project_build_subtask">
+			<param name="target" value="target/html" />
+			<param name="version" value="${www.playerversion}" />
+			<param name="width" value="${www.flash.default.size.width}" />
+			<param name="height" value="${www.flash.default.size.height}" />
+			<param name="entrypoint" value="${flash.file.entrypoint.preloader}" />
+		</antcall>
+	</target>
+
+
+	<!-- ######################################
+			SWF Debug
+		###################################### -->
+
+	<target name="debug" description="Debug in Browser: localhost" depends="">
+		<antcall target="_start_debugger" />
+		
+		<exec executable="open" dir="." failonerror="true">
+			<!-- 
+			<arg line="${global.file.chrome} ${project.host}/?gate=off" />
+			 -->
+			<arg line="file://localhost/${project.dir}/target/html/index.html" />
+
+		</exec>
+	</target>
+
+</project>

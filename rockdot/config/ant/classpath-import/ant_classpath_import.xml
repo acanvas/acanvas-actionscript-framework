@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Classpath Build" default="collectClasspath">
+	
+	<!-- ######################################
+			PRIVATE METHODS
+		###################################### -->
+
+	<target name="collectClasspath">
+		<delete file="${flash.file.classpath.rockdot}"/>
+		<xslt basedir="." in="${global.dir.rockdot}/.settings/com.powerflasher.fdt.classpath" out="${flash.file.classpath.rockdot}" style="${global.dir.rockdot}/config/ant/classpath-import/fdt_as3classpath.xsl" reloadstylesheet="true">
+		</xslt>
+
+		<delete file="${flash.file.classpath.project}"/>
+		<xslt basedir="." in="${basedir}/.settings/com.powerflasher.fdt.classpath" out="${flash.file.classpath.project}" style="${global.dir.rockdot}/config/ant/classpath-import/fdt_as3classpath_project.xsl" reloadstylesheet="true">
+		</xslt>
+	</target>
+
+</project>

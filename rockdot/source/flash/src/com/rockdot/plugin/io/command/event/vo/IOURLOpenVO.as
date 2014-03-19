@@ -1,0 +1,1 @@
+package com.rockdot.plugin.io.command.event.vo {	public class IOURLOpenVO 	{		public var targetUrl : String;		public var targetWindow : String;		public var options : String;		public function IOURLOpenVO ( targetUrl : String, targetWindow : String, options : String ) {			this.targetUrl = targetUrl;			this.targetWindow = targetWindow;			this.options = options;		}	}}

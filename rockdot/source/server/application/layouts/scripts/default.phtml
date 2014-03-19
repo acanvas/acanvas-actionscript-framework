@@ -1,0 +1,172 @@
+<?php 
+$configuration = Zend_Registry::get('Application_Config');
+$configuration_locale = Zend_Registry::get('Application_Config_Locale');
+$jvm_registry = JVM_Registry::getInstance();
+?>
+<!DOCTYPE html>
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="<?php echo $jvm_registry->get('language') ?>" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="<?php echo $jvm_registry->get('language') ?>" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml> <![endif]-->
+
+<!--[if gt IE 8]><!-->
+<html
+	class="no-js" lang="<?php echo $jvm_registry->get('language') ?>"
+	xmlns:og="http://ogp.me/ns#"
+	xmlns:fb="https://www.facebook.com/2008/fbml> 
+<!--<![endif]-->
+<head>
+
+<meta charset="utf-8">
+<!-- Always force latest IE rendering engine (even in intranet) -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<title><?php echo $configuration_locale->title ?></title>
+
+<meta name="Description"
+	content="<?php echo $configuration_locale->description ?>">
+<meta name="author"
+	content="<?php echo $configuration_locale->author ?>">
+<meta name="copyright"
+	content="<?php echo $configuration_locale->copyright ?>">
+<meta name="language" content="<?php echo $jvm_registry->language ?>">
+<meta name="revisit-after" content="10 days">
+<meta http-equiv="imagetoolbar" content="no">
+
+<link rel="shortcut icon" sizes="16x16"
+	href="<?php echo $this->baseUrl('/');?>assets/images/html/icon/JM_ico_16.png">
+<link rel="shortcut icon" sizes="128x128"
+	href="<?php echo $this->baseUrl('/');?>assets/images/html/icon/JM_ico_128.png">
+<link rel="apple-touch-icon"
+	href="<?php echo $this->baseUrl('/');?>assets/images/html/icon/apple-touch-icon.png">
+
+<!-- Facebook OpenGraph tags -->
+<meta property="og:title"
+	content="<?php echo $configuration_locale->title ?>" />
+<meta property="og:url"
+	content="<?php echo $configuration_locale->share_url ?>" />
+<meta property="og:description"
+	content="<?php echo $configuration_locale->description ?>" />
+<meta property="og:image"
+	content="<?php echo $configuration_locale->image ?>" />
+<meta property="og:type" content="website" />
+
+<!-- <link rel="dns-prefetch" href="//widget.foo.com"> DNS Prefetch for better DNS lookup time (e.g. webfont services) -->
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, target-densitydpi=device-dpi">
+
+<!-- set class to prevent flickering -->
+<script>
+	document.documentElement.className += " JM_js-load";
+</script>
+<!-- START include external css -->
+<link href="<?php echo $this->baseUrl('/');?>assets/css/JM_global.css"
+	rel="stylesheet">
+<!-- END include external css -->
+
+<!-- START include modernizr -->
+<!-- TODO: include custom version for deployment -->
+<script
+	src="<?php echo $this->baseUrl('/');?>assets/js/lib/modernizr.min.js"></script>
+<!-- END include modernizr -->
+
+<!--[if lt IE 9]>
+    <script src="<?php echo $this->baseUrl('/');?>assets/js/lib/selectivizr.min.js"></script>
+<![endif]-->
+
+<!-- START include external javascript -->
+<script
+	src="<?php echo $this->baseUrl('/');?>assets/js/lib/swfobject.js"></script>
+<script
+	src="<?php echo $this->baseUrl('/');?>assets/js/lib/swfaddress.js"></script>
+<!-- END include external javascript -->
+
+</head>
+<body>
+	<!-- START area document -->
+	<div class="JM_area-dc">
+
+		<!-- START area header -->
+		<header class="JM_area-hd" role="banner">
+			<div class="JM_ct"></div>
+		</header>
+		<!-- END area header -->
+
+		<!-- START module main navigation -->
+		<nav class="JM_mod-mn" role="navigation">
+			<div class="JM_ct"></div>
+		</nav>
+		<!-- END module main navigation -->
+
+		<!-- START area content -->
+		<section class="JM_area-ct" role="main">
+			<div class="JM_ct">
+				<?php echo $this->layout()->content ?>
+			</div>
+		</section>
+		<!-- END area content -->
+
+		<!-- START area sidebar -->
+		<aside class="JM_area-sb" role="complementary">
+			<div class="JM_ct"></div>
+		</aside>
+		<!-- END area sidebar -->
+
+		<!-- START area footer -->
+		<footer class="JM_area-ft" role="contentinfo">
+			<div class="JM_ct">
+				<a class="JM_ctFooterLink" id="footerImprint"
+					href="<?= $configuration_locale->url_imprint ?>"><?= $configuration_locale->txt_imprint ?>
+				</a>
+				<div class="JM_ctFooterSpacer">&#8226;</div>
+				<a class="JM_ctFooterLink" id="footerTerms"
+					href="<?= $configuration_locale->url_terms ?>"><?= $configuration_locale->txt_terms ?>
+				</a>
+				<div class="JM_ctFooterSpacer">&#8226;</div>
+				<a class="JM_ctFooterLink" id="footerPrivacy"
+					href="<?= $configuration_locale->url_privacy ?>"><?= $configuration_locale->txt_privacy ?>
+				</a>
+
+			</div>
+		</footer>
+		<script type="text/javascript">
+	
+		function openImprint(){
+			window.open("<? echo $configuration_locale->url_imprint ?>", "<?= $configuration_locale->txt_imprint ?>", "width=550,height=450,toolbar=no,scrollbars=no");
+		}
+		function openTerms(){
+			window.open("<? echo $configuration_locale->url_terms ?>", "<?= $configuration_locale->txt_terms ?>", "width=550,height=450,toolbar=no,scrollbars=no");
+		}
+		function openPrivacy(){
+			window.open("<? echo $configuration_locale->url_privacy ?>", "<?= $configuration_locale->txt_privacy ?>", "width=550,height=450,toolbar=no,scrollbars=no");
+		}
+				
+		</script>
+		<!-- END area footer -->
+
+	</div>
+	<!-- END area document -->
+
+	<!-- Facebook SDK START -->
+	<div id="fb-root"></div>
+	<script type="text/javascript">
+		
+		/* ### FB JSSDK LOAD (ASYNC) ################################# */
+		
+		( function(d) {
+			var js, id = 'facebook-jssdk';
+			if(d.getElementById(id)) {
+				return;
+			}
+			js = d.createElement('script');
+			js.id = id;
+			js.async = true;
+			js.src = "//connect.facebook.net/<? echo $jvm_registry->get('locale') ?>/all.js";
+			d.getElementById('fb-root').appendChild(js);
+		}(document));
+
+	</script>
+	<!-- Facebook SDK END -->
+	<!-- 
+	<script src='<?php echo $this->baseUrl('/js/zf-ajax.js');?>'></script>
+	 -->
+</body>
+</html>

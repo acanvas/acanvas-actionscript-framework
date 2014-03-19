@@ -1,0 +1,2 @@
+package com.rockdot.plugin.ugc.command.event.vo {	import com.rockdot.core.RockdotVO;	public class UGCDataVO {				public var dao : RockdotVO;		public var condition : String;		public var limit : String;
+				public function UGCDataVO(dao : RockdotVO, condition : String = "", limit : String = "") {			this.condition = condition;			this.limit = limit;			this.dao = dao ? dao : new RockdotVO();		}	}}

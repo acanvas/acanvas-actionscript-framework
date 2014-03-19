@@ -1,0 +1,1 @@
+package de.alexmilde.frontend.menueBar {	import flash.events.Event;		/**	 * @author alexmilde	 */	public class SimpleMenueEvent extends Event 	{		public function SimpleMenueEvent(type : String, bubbles : Boolean = false, cancelable : Boolean = false)		{			super(type, bubbles, cancelable);		}	}}

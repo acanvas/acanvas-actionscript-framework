@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<objects xmlns="http://www.springactionscript.org/schema/objects"
+		 xmlns:rockdot="http://www.sounddesignz.com/schema/rockdot"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.springactionscript.org/schema/objects http://www.sounddesignz.com/schema/spring/spring-actionscript-objects-2.0.xsd 
+					http://www.sounddesignz.com/schema/rockdot http://www.sounddesignz.com/schema/rockdot/spring-actionscript-rockdot-2.0.xsd">
+
+	<!--
+		##########################################################################################
+		 Application Context // context-screen.xml
+		##########################################################################################
+	-->
+	
+	<property file="@project.appversion@/@@language@@.properties" />
+	
+	<!-- UI Plugin -->
+	<object id="plugin_ui" class="com.rockdot.plugin.screen.ScreenFeathersPlugin" scope="singleton"></object>
+	
+	<!-- Settings Singleton Models -->
+	<object id="buttonSettings" class="com.rockdot.project.view.data.ButtonSettings" scope="singleton">
+	</object>
+	<object id="groupedListSettings" class="com.rockdot.project.view.data.GroupedListSettings" scope="singleton">
+	</object>
+	<object id="listSettings" class="com.rockdot.project.view.data.ListSettings" scope="singleton">
+	</object>
+	<object id="sliderSettings" class="com.rockdot.project.view.data.SliderSettings" scope="singleton">
+	</object>
+	
+	<!-- Screen Transition Effects -->
+	<rockdot:transition id="transition.default" class="com.rockdot.library.view.effect.HLeftSwipeTransition" duration="0.5" initialAlpha="0" type="UIConstants.TRANSITION_PARALLEL"/>
+	
+	<!-- Screens -->
+	<rockdot:screen id="screen.feathers.home"
+		tree_order="1" 
+		tree_parent="0" 
+		transition="transition.default"
+		class="com.rockdot.project.view.screen.HomeScreen" >
+	</rockdot:screen>
+	<rockdot:screen id="screen.button"
+		tree_order="2" 
+		tree_parent="1" 
+		transition="transition.default"
+		class="com.rockdot.project.view.screen.ButtonScreen" >
+		<property name="settings" ref="buttonSettings"/>
+	</rockdot:screen>
+	<rockdot:screen id="screen.buttonsettings"
+		tree_order="30" 
+		tree_parent="2" 
+		transition="transition.default"
+		class="com.rockdot.project.view.screen.ButtonSettingsScreen" >
+		<property name="settings" ref="buttonSettings"/>
+	</rockdot:screen>
+	<rockdot:screen id="screen.buttongroup"
+		tree_order="4" 
+		tree_parent="1" 
+		transition="transition.default"
+		class="com.rockdot.project.view.screen.ButtonGroupScreen" >
+	</rockdot:screen>
+	<rockdot:screen id="screen.callout"
+		tree_order="5" 
+		tree_parent="1" 
+		transition="transition.default"
+		class="com.rockdot.project.view.screen.CalloutScreen" >
+	</rockdot:screen>
+	<rockdot:screen id="screen.groupedlist"
+		tree_order="6" 
+		tree_parent="1" 
+		transition="transition.default"
+		class="com.rockdot.project.view.screen.GroupedListScreen" >
+		<property name="settings" ref="groupedlistSettings"/>
+	</rockdot:screen>
+	<rockdot:screen id="screen.groupedlistsettings"
+		tree_order="60" 
+		tree_parent="6" 
+		transition="transition.default"
+		class="com.rockdot.project.view.screen.GroupedListSettingsScreen" >
+		<property name="settings" ref="groupedlistSettings"/>
+	</rockdot:screen>
+	<rockdot:screen id="screen.list"
+		tree_order="7" 
+		tree_parent="1" 
+		transition="transition.default"
+		class="com.rockdot.project.view.screen.ListScreen" >
+		<property name="settings" ref="listSettings"/>
+	</rockdot:screen>
+	<rockdot:screen id="screen.listsettings"
+		tree_order="70" 
+		tree_parent="7" 
+		transition="transition.default"
+		class="com.rockdot.project.view.screen.ListSettingsScreen" >
+		<property name="settings" ref="listSettings"/>
+	</rockdot:screen>
+	<rockdot:screen id="screen.screenindicator"
+		tree_order="8" 
+		tree_parent="1" 
+		transition="transition.default"
+		class="com.rockdot.project.view.screen.PageIndicatorScreen" >
+	</rockdot:screen>
+	<rockdot:screen id="screen.pickerlist"
+		tree_order="9" 
+		tree_parent="1" 
+		transition="transition.default"
+		class="com.rockdot.project.view.screen.PickerListScreen" >
+	</rockdot:screen>
+	<rockdot:screen id="screen.progressbar"
+		tree_order="10" 
+		tree_parent="1" 
+		transition="transition.default"
+		class="com.rockdot.project.view.screen.ProgressBarScreen" >
+	</rockdot:screen>
+	<rockdot:screen id="screen.scrolltext"
+		tree_order="11" 
+		tree_parent="1" 
+		transition="transition.default"
+		class="com.rockdot.project.view.screen.ScrollTextScreen" >
+	</rockdot:screen>
+	<rockdot:screen id="screen.slider"
+		tree_order="12" 
+		tree_parent="1" 
+		transition="transition.default"
+		class="com.rockdot.project.view.screen.SliderScreen" >
+		<property name="settings" ref="sliderSettings"/>
+	</rockdot:screen>
+	<rockdot:screen id="screen.slidersettings"
+		tree_order="120" 
+		tree_parent="12" 
+		transition="transition.default"
+		class="com.rockdot.project.view.screen.SliderSettingsScreen" >
+		<property name="settings" ref="sliderSettings"/>
+	</rockdot:screen>
+	<rockdot:screen id="screen.tabbar"
+		tree_order="13" 
+		tree_parent="1" 
+		transition="transition.default"
+		class="com.rockdot.project.view.screen.TabBarScreen" >
+	</rockdot:screen>
+	<rockdot:screen id="screen.textinput"
+		tree_order="14" 
+		tree_parent="1" 
+		transition="transition.default"
+		class="com.rockdot.project.view.screen.TextInputScreen" >
+	</rockdot:screen>
+	<rockdot:screen id="screen.toggles"
+		tree_order="15" 
+		tree_parent="1" 
+		transition="transition.default"
+		class="com.rockdot.project.view.screen.ToggleScreen" >
+	</rockdot:screen>
+	
+	
+</objects>

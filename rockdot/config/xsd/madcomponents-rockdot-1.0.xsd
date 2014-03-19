@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.sounddesignz.com/schema/mad"
+	xmlns="http://www.sounddesignz.com/schema/mad" 
+	elementFormDefault="qualified">
+
+	<xsd:annotation>
+		<xsd:documentation><![CDATA[
+			MadComponents Schema
+			Schema Authors: Nils Doehring
+			]]>
+		</xsd:documentation>
+	</xsd:annotation>
+
+	<xsd:element name="madscreen" type="pagesType"/>
+
+	<xsd:complexType name="pagesType" mixed="false">
+		<xsd:choice maxOccurs="unbounded" minOccurs="0">
+			<xsd:element name="switch" type="switchType" />
+			<xsd:element name="tick" type="tickType" />
+			<xsd:element name="arrow" type="arrowType" />
+			<xsd:element name="image" type="imageType" />
+			<xsd:element name="input" type="inputType" />
+			<xsd:element name="label" type="labelType" />
+			<xsd:element name="button" type="buttonType" />
+			<xsd:element name="slider" type="sliderType" />
+			<xsd:element name="imageLoader" type="imageLoaderType" />
+			<xsd:element name="search" type="searchType" />
+			<xsd:element name="scrollVertical" type="scrollVerticalType" />
+			<xsd:element name="scrollXY" type="scrollXYType" />
+			<xsd:element name="list" type="listType" />
+			<xsd:element name="picker" type="pickerType" />
+			<xsd:element name="groupedList" type="groupedListType" />
+			<xsd:element name="dividedList" type="dividedListType" />
+			<xsd:element name="tickList" type="tickListType" />
+			<xsd:element name="tickOneList" type="tickOneListType" />
+			<xsd:element name="frame" type="frameType" />
+			<xsd:element name="vertical" type="verticalType" />
+			<xsd:element name="rows" type="rowsType" />
+			<xsd:element name="horizontal" type="horizontalType" />
+			<xsd:element name="columns" type="columnsType" />
+			<xsd:element name="viewFlipper" type="viewFlipperType" />
+			<xsd:element name="tabPages" type="tabPagesType" />
+			<xsd:element name="navigation" type="navigationType" />
+			<xsd:element name="treeNavigation" type="treeNavigationType" />
+			<xsd:element name="group" type="groupType" />
+			<xsd:element name="clickableGroup" type="clickableGroupType" />
+			<!-- 
+			<xsd:any maxOccurs="unbounded" minOccurs="0" namespace="##other"
+				processContents="strict" />
+			 -->
+		</xsd:choice>
+		<xsd:attributeGroup ref="rootAttributes" />
+	</xsd:complexType>
+
+	<xsd:attribute name="clickable" type="xsd:boolean" />
+	<xsd:attribute name="alt" type="xsd:boolean" />
+	<xsd:attribute name="width" type="xsd:int" />
+	<xsd:attribute name="height" type="xsd:int" />
+	<xsd:attribute name="prompt" type="xsd:string" />
+	<xsd:attribute name="promptColour" type="xsd:string" />
+	<xsd:attribute name="skin" type="xsd:string">
+
+		<xsd:annotation>
+			<xsd:documentation>\n
+				Example:\n
+				[Embed source="img.jpg",
+				scaleGridTop="10",
+				scaleGridBottom="10",
+				scaleGridLeft="10",
+				scaleGridRight="10",
+				]
+				protected static const IMG:Class;
+
+				Attribute:
+				skin="{getQualifiedClassName(IMG)}"
+			</xsd:documentation>
+		</xsd:annotation>
+	</xsd:attribute>
+	<xsd:attribute name="value" type="xsd:float" />
+	<xsd:attribute name="base" type="xsd:string" />
+	<xsd:attribute name="field" type="xsd:string" />
+	<xsd:attribute name="autoLayout" type="xsd:boolean" />
+	<xsd:attribute name="autoFill" type="xsd:boolean" />
+	<xsd:attribute name="tapToScale" type="xsd:boolean" />
+	<xsd:attribute name="sortBy" type="xsd:string" />
+	<xsd:attribute name="index" type="xsd:string" />
+	<xsd:attribute name="pullDownRefresh" type="xsd:boolean" />
+	<xsd:attribute name="pullDownColour" type="xsd:string" />
+	<xsd:attribute name="tickColour" type="xsd:string" />
+	<xsd:attribute name="widths" type="xsd:string" />
+	<xsd:attribute name="heights" type="xsd:string" />
+	<xsd:attribute name="lines" type="xsd:int" />
+	<xsd:attribute name="pickerHeight" type="xsd:int" />
+	<xsd:attribute name="leftArrow" type="xsd:string" />
+	<xsd:attribute name="rightArrow" type="xsd:string" />
+	<xsd:attribute name="rightButton" type="xsd:string" />
+	<xsd:attribute name="title" type="xsd:string" />
+	<xsd:attribute name="autoTitle" type="xsd:boolean" />
+	
+	
+	<xsd:attributeGroup name="rootAttributes">
+		<xsd:attribute name="stageColour" type="xsd:string" use="optional" />
+		<xsd:attribute name="clickColour" type="xsd:string" use="optional" />
+		<xsd:attribute name="dpi" type="xsd:int" use="optional" />
+		<xsd:attribute name="autoScale" type="xsd:boolean" use="optional" />
+		<xsd:attribute name="autoResize" type="xsd:boolean" use="optional" />
+	</xsd:attributeGroup>
+
+	<xsd:attributeGroup name="madAttributes">
+		<xsd:attribute name="alignH" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>In Element "button": center, left, right\n
+					In
+					Element "columns": fill
+				</xsd:documentation>
+			</xsd:annotation>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="centre" />
+					<xsd:enumeration value="left" />
+					<xsd:enumeration value="right" />
+					<xsd:enumeration value="fill" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+
+		<xsd:attribute name="alignV" use="optional">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="centre" />
+					<xsd:enumeration value="top" />
+					<xsd:enumeration value="bottom" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+
+		<xsd:attribute name="gapH" type="xsd:int" use="optional" />
+		<xsd:attribute name="gapV" type="xsd:int" use="optional" />
+		<xsd:attribute name="colour" type="xsd:string" use="optional" />
+		<xsd:attribute name="background" type="xsd:string" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>In Element "button": #background-color,
+					#line-color,
+					#pressed-background-color, corner-curve\n
+					In Element
+					"vertical, horizontal": #first-color, #transition-color,
+					transition-height, rotation\n
+					In Element "arrow, input":
+					#background-color, #background-line-color
+					In Element "slider":
+					#slide-background-color, #slide-button-first-color,
+					#slide-button-second-color
+					In Element "list":
+					#background-color,
+					first-background-color, #second-background-color
+				</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="scrollBarColour" type="xsd:string"
+			use="optional" />
+	</xsd:attributeGroup>
+
+	<xsd:attributeGroup name="listAttributes">
+		<xsd:attribute ref="autoLayout" use="optional" />
+		<xsd:attribute ref="sortBy" use="optional" />
+		<xsd:attribute ref="index" use="optional" />
+		<xsd:attribute ref="pullDownRefresh" use="optional" />
+		<xsd:attribute ref="pullDownColour" use="optional" />
+	</xsd:attributeGroup>
+
+	<xsd:attributeGroup name="navigationAttributes">
+		<xsd:attribute ref="leftArrow" use="optional" />
+		<xsd:attribute ref="rightArrow" use="optional" />
+		<xsd:attribute ref="rightButton" use="optional" />
+		<xsd:attribute ref="title" use="optional" />
+		<xsd:attribute ref="autoFill" use="optional" />
+		<xsd:attribute ref="autoTitle" use="optional" />
+	</xsd:attributeGroup>
+
+	<xsd:complexType name="switchType" mixed="false">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute ref="clickable" use="optional" />
+				<xsd:attributeGroup ref="madAttributes" />
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="tickType" mixed="false">
+		<xsd:attributeGroup ref="madAttributes" />
+		<xsd:attribute ref="clickable" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="arrowType" mixed="false">
+		<xsd:attributeGroup ref="madAttributes" />
+		<xsd:attribute ref="clickable" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="imageType" mixed="false">
+		<xsd:attributeGroup ref="madAttributes" />
+		<xsd:attribute ref="clickable" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="inputType" mixed="false">
+		<xsd:attributeGroup ref="madAttributes" />
+		<xsd:attribute ref="alt" use="optional" />
+		<xsd:attribute ref="width" use="optional" />
+		<xsd:attribute ref="prompt" use="optional" />
+		<xsd:attribute ref="promptColour" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="labelType" mixed="false">
+		<xsd:attributeGroup ref="madAttributes" />
+		<xsd:attribute ref="height" use="optional" />
+		<xsd:attribute ref="width" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="buttonType" mixed="false">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attributeGroup ref="madAttributes" />
+				<xsd:attribute ref="clickable" use="optional" />
+				<xsd:attribute ref="alt" use="optional" />
+				<xsd:attribute ref="height" use="optional" />
+				<xsd:attribute ref="width" use="optional" />
+				<xsd:attribute ref="skin" use="optional" />
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="sliderType" mixed="false">
+		<xsd:attributeGroup ref="madAttributes" />
+		<xsd:attribute ref="clickable" use="optional" />
+		<xsd:attribute ref="value" use="optional" />
+		<xsd:attribute ref="width" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="imageLoaderType" mixed="false">
+		<xsd:attributeGroup ref="madAttributes" />
+		<xsd:attribute ref="clickable" use="optional" />
+		<xsd:attribute ref="base" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="searchType" mixed="false">
+		<xsd:attributeGroup ref="madAttributes" />
+		<xsd:attribute ref="field" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="scrollVerticalType" mixed="false">
+		<xsd:attributeGroup ref="madAttributes" />
+		<xsd:attribute ref="autoLayout" use="optional" />
+		<xsd:attribute ref="autoFill" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="scrollXYType" mixed="false">
+		<xsd:choice maxOccurs="1" minOccurs="1">
+			<xsd:element name="image" type="imageType" />
+		</xsd:choice>
+		<xsd:attribute ref="tapToScale" use="optional" />
+		<xsd:attributeGroup ref="madAttributes" />
+	</xsd:complexType>
+	<xsd:complexType name="listType" mixed="false">
+		<xsd:annotation>
+			<xsd:documentation>Provide a JSON Data Object as String. You can
+				append a "horizontal" node, serving as cell renderer
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="frameType">
+				<xsd:choice maxOccurs="1" minOccurs="0">
+					<xsd:element name="search" type="searchType" />
+					<xsd:element name="vertical" type="verticalType" />
+				</xsd:choice>
+				<xsd:attributeGroup ref="listAttributes" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="pickerType" mixed="false">
+		<xsd:complexContent>
+			<xsd:extension base="listType">
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="groupedListType" mixed="false">
+		<xsd:complexContent>
+			<xsd:extension base="listType">
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="dividedListType" mixed="false">
+		<xsd:complexContent>
+			<xsd:extension base="listType">
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="tickListType" mixed="false">
+		<xsd:complexContent>
+			<xsd:extension base="listType">
+				<xsd:attribute ref="tickColour" use="optional" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="tickOneListType" mixed="false">
+		<xsd:complexContent>
+			<xsd:extension base="listType">
+				<xsd:attribute ref="tickColour" use="optional" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="frameType" mixed="false">
+		<xsd:attributeGroup ref="madAttributes" />
+	</xsd:complexType>
+	<xsd:complexType name="verticalType" mixed="false">
+		<xsd:complexContent>
+			<xsd:extension base="pagesType">
+				<xsd:attributeGroup ref="madAttributes" />
+				<xsd:attribute ref="autoLayout" use="optional" />
+				<xsd:attribute ref="autoFill" use="optional" />
+				<xsd:attribute ref="heights" use="optional" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="rowsType" mixed="false">
+		<xsd:complexContent>
+			<xsd:extension base="pagesType">
+				<xsd:attributeGroup ref="madAttributes" />
+				<xsd:attribute ref="autoLayout" use="optional" />
+				<xsd:attribute ref="autoFill" use="optional" />
+				<xsd:attribute ref="heights" use="optional" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="horizontalType" mixed="false">
+		<xsd:complexContent>
+			<xsd:extension base="pagesType">
+				<xsd:attributeGroup ref="madAttributes" />
+				<xsd:attribute ref="autoLayout" use="optional" />
+				<xsd:attribute ref="autoFill" use="optional" />
+				<xsd:attribute ref="widths" use="optional" />
+				<xsd:attribute ref="lines" use="optional" />
+				<xsd:attribute ref="pickerHeight" use="optional" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="columnsType" mixed="false">
+		<xsd:complexContent>
+			<xsd:extension base="pagesType">
+				<xsd:attributeGroup ref="madAttributes" />
+				<xsd:attribute ref="autoLayout" use="optional" />
+				<xsd:attribute ref="autoFill" use="optional" />
+				<xsd:attribute ref="widths" use="optional" />
+				<xsd:attribute ref="lines" use="optional" />
+				<xsd:attribute ref="pickerHeight" use="optional" />
+			</xsd:extension>
+		</xsd:complexContent>
+
+	</xsd:complexType>
+	<xsd:complexType name="viewFlipperType" mixed="false">
+		<xsd:choice maxOccurs="1" minOccurs="1">
+			<xsd:element name="pages" type="pagesType" />
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:complexType name="tabPagesType" mixed="false">
+		<xsd:choice maxOccurs="1" minOccurs="1">
+			<xsd:element name="pages" type="pagesType" />
+		</xsd:choice>
+		<xsd:attribute ref="alt" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="navigationType" mixed="false">
+		<xsd:complexContent>
+			<xsd:extension base="pagesType">
+				<xsd:attributeGroup ref="navigationAttributes" />
+				<xsd:attributeGroup ref="madAttributes" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="treeNavigationType" mixed="false">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attributeGroup ref="navigationAttributes" />
+				<xsd:attributeGroup ref="madAttributes" />
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="groupType" mixed="false">
+		<xsd:complexContent>
+			<xsd:extension base="pagesType">
+				<xsd:attributeGroup ref="madAttributes" />
+				<xsd:attribute ref="autoLayout" use="optional" />
+				<xsd:attribute ref="autoFill" use="optional" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="clickableGroupType" mixed="false">
+		<xsd:attributeGroup ref="madAttributes" />
+		<xsd:attribute ref="autoLayout" use="optional" />
+		<xsd:attribute ref="autoFill" use="optional" />
+	</xsd:complexType>
+
+</xsd:schema>

@@ -1,0 +1,1 @@
+package de.alexmilde.frontend.menueBar {	/**	 * @author alexmilde	 */	public class MenueState 	{		private var _model : MenueModel;						public function MenueState(model : MenueModel)		{			_model = model;		}				public function update(arg0 : int) : void		{		}	}}

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Blackberry Build" default="build" basedir="../../">
+	<import file="../../config/includes.xml" />
+	<property name="dir.this" value="platforms/blackberry" />
+	<property file="${dir.this}/blackberry.properties" />
+
+	<!-- ###################################### Blackberry: Prepare and Package ###################################### -->
+
+	<target name="build_swf">
+		<!-- CLEAN UP -->
+		<delete includeemptydirs="false" failonerror="false">
+			<fileset dir="${blackberry.dir.build}" includes="**/*" />
+		</delete>
+		<mkdir dir="${blackberry.dir.build}" />
+
+		<delete includeemptydirs="false" failonerror="false">
+			<fileset dir="${blackberry.dir.target}" includes="**/*" />
+		</delete>
+		<mkdir dir="${blackberry.dir.target}" />
+
+		<!-- COMPILE SWF -->
+		<antcall target="project_build_subtask">
+			<param name="target" value="${blackberry.dir.build}" />
+			<param name="version" value="${blackberry.playerversion}" />
+			<param name="width" value="${blackberry.width}" />
+			<param name="height" value="${blackberry.height}" />
+			<param name="entrypoint" value="${flash.file.entrypoint.preloader}" />
+			<param name="frametwo" value="${flash.entrypoint.application}" />
+		</antcall>
+
+		<!-- COPY ICONS (to /icons) -->
+		<copy todir="${blackberry.dir.include}" encoding="ISO-8859-1" preservelastmodified="true">
+			<fileset dir="${dir.this}/resources/icons" includes="**/*.png" />
+			<fileset dir="${dir.this}/resources/images" includes="**/*.png" />
+		</copy>
+
+		<!-- COPY APP DESCRIPTOR (to root) -->
+		<copy todir="${blackberry.dir.build}" encoding="${flash.encoding}" preservelastmodified="true">
+			<fileset file="${dir.this}/air-blackberry.xml" />
+			<fileset file="${dir.this}/bar-descriptor.xml" />
+			<filterset refid="copyfilterset" />
+			<filterset>
+				<filtersfile file="${dir.this}/blackberry.properties" />
+			</filterset>
+		</copy>
+
+
+		<echo message="Blackberry Build - Finished" />
+
+	</target>
+
+	<target name="build" description="Build the App and Package as apk">
+		<antcall target="build_swf" />
+		<antcall target="build_app" />
+	</target>
+
+	<target name="build_swf_and_debug_local" description="Build the App and Debug">
+		<antcall target="build_swf" />
+		<antcall target="debug_local" />
+	</target>
+
+	<!-- ###################################### 
+	Private Method: Blackberry Packager 
+	###################################### -->
+
+	<target name="build_app" depends="air_selfsign">
+		<echo message="Packaging Blackberry APK" />
+
+		<exec executable="${blackberry.file.packager}" dir="${blackberry.dir.build}" failonerror="true">
+			<arg line="-package" />
+			<arg line="-target ${blackberry.target}" />
+			<arg line="-keystore ${blackberry.keystore}" />
+			<arg line="-storepass ${blackberry.keypass}" />
+			<arg line="../../${blackberry.file.bar}" />
+			<arg line="${blackberry.file.descriptor}" />
+			<arg line="${blackberry.file.bar.descriptor}" />
+			<arg line="${flash.file.name}.swf" />
+			<!-- includes -->
+			<arg line="include" />
+			<arg line="${project.appversion}" />
+			<!-- <arg line="-connect 192.168.1.94" /> <arg line="-connect 192.168.1.52" /> -->
+			<!--
+			<arg line="-extdir ${blackberry.dir.extensions.packaged}" />
+			-->
+		</exec>
+
+
+
+	</target>
+
+	<target name="profile_local" description="profile!">
+		<!-- -->
+
+		<antcall target="_start_profiler">
+			<param name="file" value="${blackberry.dir.build}/${project.name}.swf" />
+		</antcall>
+		<antcall target="_start_debugger" />
+		<exec executable="${air.adl}" dir="${blackberry.dir.build}" failonerror="false">
+			<arg line="-extdir ${blackberry.dir.extensions.unpackaged}/" />
+			<arg line="-profile ${blackberry.adl.profile}" />
+			<arg line="${blackberry.file.descriptor}" />
+		</exec>
+	</target>
+
+
+	<!-- ###################################### DEBUG ###################################### -->
+	<target name="debug_local" description="Blackberry Air Local Debug">
+		<echo message="Blackberry Air Local Debug" />
+		<antcall target="_start_debugger" />
+		<!-- -->
+		<echo message="${air.adl}" />
+		<echo message="${blackberry.dir.build}" />
+		<echo message="${blackberry.file.descriptor}" />
+		<exec executable="${air.adl}" dir="${blackberry.dir.build}" failonerror="true">
+			<arg line="-extdir ${blackberry.dir.extensions.unpackaged}/" />
+			<arg line="-profile ${blackberry.adl.profile}" />
+			<arg line="${blackberry.file.descriptor}" />
+		</exec>
+	</target>
+
+	<!-- ###################################### PRIVATE METHODS ###################################### -->
+
+	<target name="air_selfsign">
+		<echo message="Self-Signing" />
+		<exec executable="${air.adt}" dir="${blackberry.dir.build}" failonerror="true">
+			<arg line="-certificate" />
+			<arg line="-cn SelfSign" />
+			<arg line="-c US 1024-RSA" />
+			<arg line="${blackberry.keystore}" />
+			<arg line="${blackberry.keypass}" />
+		</exec>
+		<echo message="Mobile Application Signed" />
+	</target>
+
+
+</project>

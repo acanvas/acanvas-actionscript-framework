@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Context Build" default="collectAppContext">
+	<taskdef name="xmlmerge" classname="ch.elca.el4j.services.xmlmerge.anttask.XmlMergeTask" />
+		
+	
+	<!-- ######################################
+			PRIVATE METHODS
+		###################################### -->
+
+	<target name="collectAppContext">
+		<delete failonerror="false" includeemptydirs="true">
+			<fileset dir="assembly/appcontext" includes="**/*.xml" />
+			<fileset dir="assembly/flash" includes="**/*" />
+		</delete>
+
+		<copy todir="assembly/appcontext" encoding="UTF-8" flatten="true">
+			<fileset dir="${flash.dir.src}">
+				<include name="**/project/*.xml" />
+				<include name="**/bootstrap/*.xml" />
+			</fileset>
+			<filterset refid="copyfilterset"/>
+		</copy>
+		<mkdir dir="assembly/flash"/>
+		<xmlmerge dest="assembly/flash/${flash.file.context}" conf="${global.dir.rockdot}/config/ant/context-import/contextmerge.properties">
+			<fileset dir="assembly/appcontext">
+				<include name="**/*.xml" />
+			</fileset>
+		</xmlmerge>
+
+		<xslt basedir="." in="assembly/flash/${flash.file.context}" out="${flash.file.includeconfig}" style="${global.dir.rockdot}/config/ant/context-import/context_classes.xsl" reloadstylesheet="false">
+		</xslt>
+	</target>
+
+</project>

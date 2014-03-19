@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<objects xmlns="http://www.springactionscript.org/schema/objects"
+		 xmlns:rockdot="http://www.sounddesignz.com/schema/rockdot"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.springactionscript.org/schema/objects http://www.sounddesignz.com/schema/spring/spring-actionscript-objects-2.0.xsd  
+					http://www.sounddesignz.com/schema/rockdot http://www.sounddesignz.com/schema/rockdot/spring-actionscript-rockdot-2.0.xsd">
+<!--
+		##########################################################################################
+		 Application Context // context-displaylist.xml
+		##########################################################################################
+	-->
+	<property file="@project.appversion@/@@language@@.properties" />
+	
+	<!-- UI Plugin -->
+	<object id="plugin_ui" class="com.rockdot.plugin.screen.ScreenDisplaylistPlugin" scope="singleton"></object>
+	
+	<!-- Screen Transition Effects -->
+	<rockdot:transition id="transition.left" class="com.rockdot.library.view.effect.HLeftSwipeTransition" duration="0.5" initialAlpha="0" type="UIConstants.TRANSITION_PARALLEL"/>
+	<rockdot:transition id="transition.right" class="com.rockdot.library.view.effect.HRightSwipeTransition" duration="0.5" initialAlpha="0" type="UIConstants.TRANSITION_PARALLEL"/>
+	
+	<!-- Screens -->
+	<rockdot:screen id="screen.home"
+		tree_order="1" 
+		tree_parent="0" 
+		transition="transition.left" 
+		class="com.rockdot.project.view.screen.Home" >
+	</rockdot:screen>
+	<rockdot:screen id="screen.test"
+		tree_order="1" 
+		tree_parent="0" 
+		transition="transition.right" 
+		class="com.rockdot.project.view.screen.Test" >
+	</rockdot:screen>
+
+</objects>

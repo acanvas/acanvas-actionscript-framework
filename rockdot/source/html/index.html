@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="@project.default.language@"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="@project.default.language@"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="@project.default.language@">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<!-- Always force latest IE rendering engine (even in intranet) -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>@project.title@</title>
+<meta name="Description" content="Lorem ipsum dolor sit amet.">
+<meta name="author" content="Jung von Matt/Neckar GmbH">
+<meta name="copyright" content="Jung von Matt/Neckar GmbH">
+<meta name="language" content="@project.default.language@">
+<meta name="revisit-after" content="10 days">
+<meta http-equiv="imagetoolbar" content="no">
+<link rel="shortcut icon" href="/favicon.ico">
+
+<!-- include external css START -->
+<link href="assets/css/JM_global.css" rel="stylesheet" type="text/css"
+	media="screen">
+<!-- include external css END -->
+
+<!-- include external javascript START -->
+<script type="text/javascript" src="assets/js/lib/swfobject.js"></script>
+<script type="text/javascript" src="assets/js/lib/swfaddress.js"></script>
+<!-- include external javascript END -->
+
+<!-- flash reference START -->
+<script type="text/javascript">
+	function getParameter(name)
+	{
+		name = name.replace(/[\[]/, '\\\[').replace(/[\]]/, '\\\]');
+		var results = (new RegExp('[\\?&]'+ name +'=([^&#]*)')).exec(window.location.href);
+		return (results) ? results[1] : '';
+	}
+	
+	// get country & language
+	var country = ( getParameter("country") != "") ? getParameter("country") : "@project.default.country@";
+	var language = ( getParameter("language") != "") ? getParameter("language") : "@project.default.language@";
+
+
+	var flashvars = {};
+	flashvars["debug"] 				= @project.compile.debug@;
+	flashvars["local"] 				= true;
+
+	flashvars["language"] 			= language;
+	flashvars["country"] 			= country;
+	flashvars["market"] 			= "@project.default.market@";
+
+	flashvars["host_frontend"] 		= "";
+	flashvars["version"] 			= "@project.appversion@";
+	flashvars["swf_name"] 			= "JM_flashContent";
+	flashvars["protocol"] 			= "http:";
+    flashvars["app_data"] 			= ""; 
+
+	var params = {};
+	params.wmode 					= "@www.wmode@";
+	params.allowscriptaccess 		= "always";
+
+	var attributes = {};
+	attributes.id 					= flashvars["swf_name"];
+	attributes.name 				= flashvars["swf_name"];
+
+	swfobject.embedSWF(
+			flashvars["host_frontend"] + "@flash.file.name@.swf?no_cache=" + Math.random()
+			, flashvars["swf_name"]
+			, "@www.flash.default.size.width@"
+			, "@www.flash.default.size.height@"
+			, "@www.playerversion@"
+			, "assets/swf/expressInstall.swf"
+			, flashvars, params, attributes);
+	
+</script>
+<!-- flash reference END -->
+
+</head>
+
+<body>
+	<!-- document wrapper START -->
+	<div class="JM_area-ct">
+		<!-- flash START -->
+		<div id="JM_flashContent">
+		</div>
+		<!-- flash END -->
+
+	</div>
+	<!-- document wrapper END -->
+</body>
+
+</html>

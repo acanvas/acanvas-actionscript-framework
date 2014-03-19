@@ -1,0 +1,1 @@
+package com.rockdot.plugin.io.command.event.vo {	import flash.display.BitmapData;	public class IOImageSaveAsVO {		public var bitmapData : BitmapData;		public var fileName : String;		public function IOImageSaveAsVO(bmd : BitmapData, fileName : String) {			this.bitmapData = bmd;			this.fileName = fileName;		}	}}

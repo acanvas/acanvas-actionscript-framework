@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<application xmlns="http://ns.adobe.com/air/application/3.7">
+	<allowBrowserInvocation>true</allowBrowserInvocation>
+	<!-- The ID of the provisioning profile -->
+	<id>@project.id@</id>
+	<versionNumber>0.1</versionNumber>
+	<filename>@flash.file.name@.ipa</filename>
+
+	<description>
+		<text xml:lang="en">This is an example.</text>
+		<text xml:lang="de">Beispiel-Beschreibung.</text>
+	</description>
+
+	<name>
+		<text xml:lang="en">@project.title@</text>
+		<text xml:lang="de">@project.title@</text>
+	</name>
+	<copyright>@project.author@</copyright>
+	<initialWindow>
+		<content>@flash.file.name@.swf</content>
+		<systemChrome>standard</systemChrome>
+		<visible>true</visible>
+		<autoOrients>true</autoOrients>
+		<aspectRatio>portrait</aspectRatio>
+		<transparent>false</transparent>
+		<fullScreen>true</fullScreen>
+		
+		<!-- if renderMore NOT direct, set depthAndStencil to false -->
+		<renderMode>direct</renderMode>
+		<depthAndStencil>true</depthAndStencil>
+		
+		<maximizable>true</maximizable>
+		<minimizable>true</minimizable>
+		<resizable>true</resizable>
+	</initialWindow>
+	<customUpdateUI>false</customUpdateUI>
+	<icon>
+		<image29x29>include/icon29.png</image29x29>
+		<image48x48>include/icon48.png</image48x48>
+		<image57x57>include/icon57.png</image57x57>
+		<image72x72>include/icon72.png</image72x72>
+		<image114x114>include/icon114.png</image114x114>
+		<image144x144>include/icon144.png</image144x144>
+		<image512x512>include/icon512.png</image512x512>
+	</icon>
+	<iPhone>
+	<!-- see http://help.adobe.com/en_US/air/build/WSfffb011ac560372f7e64a7f12cd2dd1867-8000.html -->
+		<InfoAdditions>
+    		<![CDATA[
+       			<key>UILaunchImageFile</key>
+       			<string>Trojan</string>
+       			<key>UIStatusBarStyle</key>
+       			<string>UIStatusBarStyleBlackOpaque</string>
+       			<key>UIRequiresPersistentWiFi</key>
+				<string>YES</string>
+				<key>UIDeviceFamily</key>
+				<array>
+					<string>1</string>
+					<string>2</string>
+				</array>
+				<key>UIApplicationExitsOnSuspend</key> 
+				<true/>
+				
+				<!--
+				<key>UIRequiredDeviceCapabilities</key> 
+				<array> 
+				    <string>microphone</string> 
+				    <string>still-camera</string> 
+				</array>
+				-->
+    		]]>
+		</InfoAdditions>
+		<requestedDisplayResolution excludeDevices="iPad3 iPad4">high</requestedDisplayResolution> 
+	</iPhone>
+</application>

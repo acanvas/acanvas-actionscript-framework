@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qnx>
+    <initialWindow>
+        <systemChrome>none</systemChrome>
+        <transparent>false</transparent>
+    </initialWindow>
+ 
+    <!-- Name of author which is used for signing. Must match 
+    the developer name of your development certificate -->
+    <author>@project.author@</author>
+ 
+    <!-- Unique author ID assigned by signing authority. 
+    Required if using debug tokens -->
+    <authorId>gYAAgIqK0RLL5u4I9NanyxBUuCI</authorId>
+ 
+    <!-- The category where the application appear. 
+    Either core.games or core.media -->
+    <category>core.media</category>
+ 
+    <!-- The icon for the application which should be 150x150 -->
+    <!-- According to website, it should be 86x86 or won't display -->
+    <icon>
+        <image>include/icon86.png</image>
+    </icon>
+ 
+    <!-- The splashscreen that will appear when your 
+application is launching. Should be 1024x600.  -->
+    <splashscreen>include/launch/launch-1024x600.png:include/launch/launch-600x1024.png</splashscreen>
+ 
+    <!-- The permissions requested by your application. -->
+    <!-- <permission>access_shared</permission> -->
+    <!-- <permission>record_audio</permission> -->
+    <!-- <permission>read_geolocation</permission> -->
+    <!-- <permission>use_camera</permission> -->
+    <!-- <permission>access_internet</permission> -->
+    <!-- <permission>play_audio</permission> -->
+    <!-- <permission>post_notification</permission> -->
+    <!-- <permission>set_audio_volume</permission> -->
+    <!-- <permission>read_device_identifying_information
+         </permission> -->
+ 
+    <!-- Fourth digit segment of the package version. 
+    First three segments are taken from app description 
+    versionNumber tag. Must be an integer from 0 to 2^16-1 -->
+    <!-- <buildId>1</buildId> -->
+</qnx>

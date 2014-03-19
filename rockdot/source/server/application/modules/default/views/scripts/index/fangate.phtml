@@ -1,0 +1,9 @@
+<?php 
+$configuration_locale = Zend_Registry::get('Application_Config_Locale');
+$jvm_registry = JVM_Registry::getInstance();
+?>
+
+<div class="JM_ctFanGate">
+	<img id="background" width="809" height="853"
+		src="<?php echo $this->baseUrl('/');?>locale/<?= $jvm_registry->get('language') ?>_fangate.jpg" alt="" />
+</div>

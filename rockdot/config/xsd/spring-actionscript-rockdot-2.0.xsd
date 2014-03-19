@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:objects="http://www.springactionscript.org/schema/objects"
+	xmlns:mad="http://www.sounddesignz.com/schema/mad"
+	targetNamespace="http://www.sounddesignz.com/schema/rockdot" xmlns="http://www.sounddesignz.com/schema/rockdot"
+	elementFormDefault="qualified">
+
+	<xs:import namespace="http://www.springactionscript.org/schema/objects"
+		schemaLocation="spring-actionscript-objects-2.0.xsd" />
+	<xs:import namespace="http://www.sounddesignz.com/schema/mad"
+		schemaLocation="madcomponents-rockdot-1.0.xsd" />
+
+
+	<xs:annotation>
+		<xs:documentation><![CDATA[
+			Spring ActionScript Framework 2.0 Page Schema
+			Schema Authors: Nils Doehring
+			]]>
+		</xs:documentation>
+	</xs:annotation>
+
+	<xs:element name="screen" type="screenType" />
+
+	<xs:complexType name="screenType" mixed="true">
+		<xs:complexContent>
+			<xs:extension base="objects:objectType">
+				<xs:sequence minOccurs="0">
+					<xs:element ref="mad:madscreen"/>
+				</xs:sequence>
+				<xs:attribute name="tree_order" type="xs:int" use="optional" />
+				<xs:attribute name="tree_parent" type="xs:int" use="optional" />
+				<xs:attribute name="transition" type="xs:string" use="required" />
+				<xs:attribute name="type" use="optional">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Defines the pages
+							type.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:annotation>
+							<xs:documentation>A page can be of type normal or modal. Default
+								is normal.</xs:documentation>
+						</xs:annotation>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="StateConstants.SUB_NORMAL" />
+							<xs:enumeration value="StateConstants.SUB_MODAL" />
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+
+	<xs:element name="transition" type="transitionType" />
+
+	<xs:complexType name="transitionType" mixed="true">
+		<xs:complexContent>
+			<xs:extension base="objects:objectType">
+				<xs:attribute name="duration" type="xs:int" use="required" />
+				<xs:attribute name="type" use="required">
+					<xs:annotation>
+						<xs:documentation xml:lang="en">Defines the
+							transition's type.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:annotation>
+							<xs:documentation>A transition can be of type parallel,
+								sequential, or off. defaults to sequential.</xs:documentation>
+						</xs:annotation>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="UIConstants.TRANSITION_SEQUENTIAL" />
+							<xs:enumeration value="UIConstants.TRANSITION_PARALLEL" />
+							<xs:enumeration value="UIConstants.TRANSITION_OFF" />
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+</xs:schema>

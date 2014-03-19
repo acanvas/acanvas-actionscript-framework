@@ -1,0 +1,4 @@
+package com.rockdot.plugin.facebook.command.event.vo {	public class VOFBShare	{				public var message : String;		public var title : String;		public var image : String;
+		public var receiverUID : String;
+		public var contentlink : String;		public var actionText : String;		public var actionLink : String;
+		public function VOFBShare ( title : String = "", message : String = "", image : String = "", contentlink : String = "", actionText : String = "", actionLink : String = "" ) {			this.image = image;			this.title = title;			this.message = message;			this.contentlink = contentlink;			this.actionText = actionText;			this.actionLink = actionLink == "" ? contentlink : actionLink;		}			}}

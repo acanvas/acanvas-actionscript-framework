@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Create Command" default="create_command">
+	<taskdef resource="net/sf/antcontrib/antlib.xml" />
+	<taskdef name="fileutil" classname="ise.antelope.tasks.FileUtilTask" />
+	<property file="${global.dir.rockdot}/config/ant/create-command/create_command.properties"/>
+
+	<target name="create_command" description="awesome">
+
+		<!-- Prompt for Input and put result into property named "package" -->
+		<input addproperty="command_lowercase" message="Enter Command Name \n (CamelCased, and don't append with 'Command')" />
+		
+		<!-- Capitalize Input and put result into property named "class" -->
+		<capitalize input="${command_lowercase}" property="command_firstcap"/>
+		<allcaps input="${command_lowercase}" property="command_allcaps"/>
+
+
+		<copy tofile="source/flash/src/com/rockdot/project/command/${command_firstcap}Command.as" file="${global.dir.rockdot}/config/ant/create-command/NameCommand.as" overwrite="true">
+			<filterset>
+				<filter token="command_firstcap" value="${command_firstcap}"/>
+				<filter token="command_allcaps" value="${command_allcaps}"/>
+			</filterset>
+		</copy>
+		
+		<replaceregexp file="source/flash/src/com/rockdot/project/Project.as"
+		               match="${placeholder}"
+		               replace="${project.as.text} \\n \1"
+		               byline="true"
+		/>
+		<replaceregexp file="source/flash/src/com/rockdot/project/command/event/ProjectEvents.as"
+		               match="${placeholder}"
+		               replace="${projectevents.as.text} \\n \1"
+		               byline="true"
+		/>
+
+	</target>
+
+	<scriptdef name="capitalize" language="javascript">
+		<attribute name="input" />
+		<attribute name="property" />
+	       // getting the value
+	       var lowercaseValue = attributes.get("input");
+	 
+	       // the first character
+	       var ch = lowercaseValue.substring(0,1);
+	 
+	       // the rest of the value
+	       var rest = lowercaseValue.substring(1);
+	 
+	       // convert first character to uppercase
+	       var up = ch.toUpperCase();
+	 
+	       // concatenate the uppercase with the rest
+	       var uppercaseValue = up + rest;
+	 
+	       // store the result in a new property
+	       project.setNewProperty(attributes.get("property"), uppercaseValue);
+     </scriptdef>
+
+	<scriptdef name="allcaps" language="javascript">
+		<attribute name="input" />
+		<attribute name="property" />
+	       // getting the value
+	       var lowercaseValue = attributes.get("input");
+	 	   
+		   //ALL CAPS
+		   var uppercaseValue = lowercaseValue.toUpperCase();
+	 
+	       // store the result in a new property
+	       project.setNewProperty(attributes.get("property"), uppercaseValue);
+     </scriptdef>
+
+
+</project>
