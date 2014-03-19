@@ -10,7 +10,11 @@ bin/
 rockdot.imi
 
 #OSX specific
+.DS_Store
 **/.DS_Store
+
+#SVN
+**/.svn
 
 #developer stuff
 config/docs/
