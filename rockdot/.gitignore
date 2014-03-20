@@ -18,4 +18,3 @@ config/templates/native-extensions/
 
 # private ios keys
 config/templates/platforms/ios/resources/keys/*.*
-
