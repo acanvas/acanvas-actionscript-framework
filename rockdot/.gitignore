@@ -17,4 +17,4 @@ config/docs/
 config/templates/native-extensions/
 
 # private ios keys
-config/templates/platforms/ios/resources/keys/
+# config/templates/platforms/ios/resources/keys/
