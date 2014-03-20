@@ -17,7 +17,4 @@ config/docs/
 config/templates/native-extensions/
 
 # private ios keys
-**/*.certSigningRequest
-**/*.p12
-**/*.mobileprovision
-**/*.cer
+config/templates/platforms/ios/resources/keys/
