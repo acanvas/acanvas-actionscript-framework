@@ -3,13 +3,15 @@
 <project name="Rockdot Project Generator" default="" basedir="../">
 	<taskdef resource="net/sf/antcontrib/antlib.xml" />
 	<taskdef name="fileutil" classname="ise.antelope.tasks.FileUtilTask" />
+	<taskdef resource="com/sardak/antform/taskdefs.properties" />
 
+	<!-- not needed?
 	<property file="config/ant/global.properties" />
+	-->
 
 	<property name="dir.platforms.source" value="config/templates/platforms" />
 	<property name="dir.www.source.html" value="source/html" />
 	<property name="dir.www.source.assets" value="source/server/public/assets" />
-
 
 	<!-- Template Installation (Abstract) -->
 	<target name="_template">
@@ -26,7 +28,14 @@
 			<then>
 				<!-- Copy Global Configuration -->
 				<copy todir="${project.dir}/config" overwrite="true">
-					<fileset dir="config/templates/projects/${template}/config" excludes="project.properties,accounts.properties" />
+					<fileset dir="config/templates/projects/${template}/config" excludes="project.properties,accounts.properties,includes.xml" />
+				</copy>
+				<!-- Copy Global includes.xml -->
+				<copy todir="${project.dir}/config" preservelastmodified="false">
+					<fileset dir="config/templates/projects/${template}/config" includes="includes.xml" />
+					<filterset>
+						<filter token="global.dir.rockdot" value="${basedir}" />
+					</filterset>
 				</copy>
 				<!-- Copy and prepare Project Configuration -->
 				<antcall target="_copy">
@@ -55,10 +64,16 @@
 	</target>
 
 	<target name="_prompt_project" unless="project.name">
-		<!-- Prompt for Project Name and create global properties -->
-		<input message="Please enter the desired name of your project." addproperty="project.name.local" defaultvalue="project-demo" />
+		<!-- Prompt for Project Name and Directory -->
+		<antform stylesheet="config/ant/antform/style.antform" okMessage="Generate" focus="Generate" title="Rockdot Project Generator">
+			<label rows="1" columns="40">Choose a file and a directory</label>
+			<fileSelectionProperty required="true" label="Choose a project name: " property="project.name.local" />
+			<fileSelectionProperty label="Choose the directory for the project to be created in: " directoryChooser="true" property="project.dir.local" />
+		</antform>
+
+		<!-- create global properties -->
 		<property name="project.name" value="${project.name.local}" />
-		<property name="project.dir" value="${basedir}/../${project.name}" />
+		<property name="project.dir" value="${project.dir.local}/${project.name}" />
 	</target>
 
 
@@ -91,7 +106,12 @@
 		</if>
 
 		<!-- Delete Template if exists -->
-		<antcall target="_delete_template" />
+		<if>
+			<available file="${project.dir}" type="dir" />
+			<then>
+				<antcall target="_delete_template" />
+			</then>
+		</if>
 		<echo>Installing HTML Support</echo>
 		<antcall target="platform_html" />
 		<!-- Install Template Commons -->

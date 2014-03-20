@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="RockdotHelper Includes" default="" basedir="../">
-	<dirname file="${basedir}" property="temp.dir.project" />
-	<property name="global.dir.rockdot" value="${temp.dir.project}/rockdot"/>
+	<property name="global.dir.rockdot" value="@global.dir.rockdot@"/>
 	
 	<property file="config/global.properties" />
 	<property file="config/project.${global.environment}.properties" />

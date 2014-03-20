@@ -7,7 +7,6 @@ bin/
 
 # OSX specific
 .DS_Store
-**/.DS_Store
 
 # SVN
 **/.svn
