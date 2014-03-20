@@ -5,16 +5,19 @@ bin/
 .settings/
 .project
 
-#OSX specific
+# OSX specific
 .DS_Store
 **/.DS_Store
 
-#SVN
+# SVN
 **/.svn
 
-#developer stuff
+# developer stuff
 config/docs/
 config/templates/native-extensions/
 
-#private ios keys
-**/ios/keys/**
+# private ios keys
+**/*.certSigningRequest
+**/*.p12
+**/*.mobileprovision
+**/*.cer
