@@ -5,10 +5,6 @@ bin/
 .settings/
 .project
 
-#IntelliJ IDEA files and folders
-.idea/
-rockdot.imi
-
 #OSX specific
 .DS_Store
 **/.DS_Store
