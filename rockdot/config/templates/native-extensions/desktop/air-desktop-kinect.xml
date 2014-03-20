@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<application xmlns="http://ns.adobe.com/air/application/3.4">
+	<supportedProfiles>@desktop.descriptor.profiles@</supportedProfiles> 
+	<!-- this has to be "false" for Desktop Captive Runtime Bundle -->
+	<allowBrowserInvocation>@desktop.descriptor.allowBrowserInvocation@</allowBrowserInvocation>
+	<id>@project.id@</id>
+	<versionNumber>0.1</versionNumber>
+	<filename>@flash.file.name@.apk</filename>
+
+	<description>
+		<text xml:lang="en">This is an example.</text>
+		<text xml:lang="de">Beispiel-Beschreibung.</text>
+	</description>
+
+	<name>
+		<text xml:lang="en">@project.title@</text>
+		<text xml:lang="de">@project.title@</text>
+	</name>
+	<copyright>@project.author@</copyright>
+	<initialWindow>
+		<content>@flash.file.name@.swf</content>
+		<systemChrome>standard</systemChrome>
+		<visible>true</visible>
+		<autoOrients>false</autoOrients>
+		<aspectRatio>portrait</aspectRatio>
+		<transparent>false</transparent>
+		<fullScreen>true</fullScreen>
+		<renderMode>direct</renderMode>
+		<maximizable>true</maximizable>
+		<minimizable>true</minimizable>
+		<resizable>true</resizable>
+	</initialWindow>
+	<customUpdateUI>false</customUpdateUI>
+	<icon>
+		<image16x16>include/icon16.png</image16x16>
+		<image32x32>include/icon32.png</image32x32>
+		<image48x48>include/icon48.png</image48x48>
+		<image128x128>include/icon128.png</image128x128>
+	</icon>
+	<extensions>
+        <extensionID>com.as3nui.nativeExtensions.air.kinect</extensionID>
+    </extensions>
+</application>

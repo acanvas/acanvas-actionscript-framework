@@ -14,7 +14,12 @@ bin/
 
 # developer stuff
 config/docs/
-config/templates/native-extensions/
+config/templates/native-extensions/android/**
+config/templates/native-extensions/ios/**
+config/templates/native-extensions/desktop/**
+!config/templates/native-extensions/**/*.md
+!config/templates/native-extensions/**/*.xml
 
 # private ios keys
-config/templates/platforms/ios/resources/keys/*.*
+config/templates/platforms/ios/resources/keys/**
+!config/templates/platforms/ios/resources/keys/*.md

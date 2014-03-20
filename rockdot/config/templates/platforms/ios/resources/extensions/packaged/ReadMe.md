@@ -1,0 +1,2 @@
+- place your p12 certificate and your mobileprovision here.
+- then, go to ../ios.properties and edit filenames and password, accordingly.
