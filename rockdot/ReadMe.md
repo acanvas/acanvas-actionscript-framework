@@ -32,7 +32,7 @@
 * platform_desktop
 * platform_html
 * platform_ios
-* platform_server (Zend PHP Framework)
+* platform_server (Zend PHP Framework) 
 
 After creating a project, import it into your IDE. Open the /platforms folder.
 Every platform has a <platform>_build.xml. 
