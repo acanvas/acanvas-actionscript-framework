@@ -4,8 +4,8 @@
 	<property name="global.dir.rockdot" value="@global.dir.rockdot@"/>
 	
 	<property file="config/global.properties" />
-	<property file="config/project.${global.environment}.properties" />
-	<property file="config/accounts.${global.environment}.properties" />
+	<property file="config/${global.environment}/public.properties" />
+	<property file="config/${global.environment}/private.properties" />
 
 
 	<import file="${global.dir.rockdot}/config/ant/rockdot_subtasks.xml" />

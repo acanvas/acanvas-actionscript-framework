@@ -9,7 +9,7 @@
 
 	<!-- Property Files -->
 	<property file="@project.appversion@/bootstrap-@@language@@.properties" />
-	<property file="@project.appversion@/project.properties" />
+	<property file="@project.appversion@/public.properties" />
 	
 	<!-- Application Delegate -->
 	<object id="bootstrap" class="com.rockdot.bootstrap.Bootstrap" lazy-init="true"></object>

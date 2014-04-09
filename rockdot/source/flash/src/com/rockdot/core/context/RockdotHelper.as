@@ -20,15 +20,22 @@ package com.rockdot.core.context {
 
 		public static function registerCommands(objectFactory : IObjectFactory, map : Dictionary) : void {
 			var controller:IController = objectFactory.getObject(CoreMVCControllerObjectFactoryPostProcessor.CONTROLLER_OBJECT_NAME);
-			var objectDefinition:ObjectDefinition;
-			for (var commandName:String in map){
-				objectDefinition = new ObjectDefinition(ClassUtils.getFullyQualifiedName(map[commandName], true));
-				objectDefinition.isLazyInit = true;
-				objectDefinition.scope = ObjectDefinitionScope.PROTOTYPE;
-				objectDefinition.autoWireMode = AutowireMode.NO;
-				objectFactory.objectDefinitionRegistry.registerObjectDefinition(commandName, objectDefinition);
-				controller.registerCommandForEventType(commandName, commandName, CoreMVCControllerObjectFactoryPostProcessor.DEFAULT_EXECUTE_METHOD_NAME);
+			for (var commandName : String in map) {
+				registerCommand(objectFactory, commandName, map[commandName], ObjectDefinitionScope.PROTOTYPE, controller);
+
 			}
+		}
+
+		public static function registerCommand(objectFactory : IObjectFactory, commandName : String, clazz : Class, scope : ObjectDefinitionScope, controller : IController = null) : void {
+			if(controller == null){
+				controller = objectFactory.getObject(CoreMVCControllerObjectFactoryPostProcessor.CONTROLLER_OBJECT_NAME);
+			}
+			var objectDefinition : ObjectDefinition = new ObjectDefinition(ClassUtils.getFullyQualifiedName(clazz, true));
+			objectDefinition.isLazyInit = true;
+			objectDefinition.scope = scope;
+			objectDefinition.autoWireMode = AutowireMode.NO;
+			objectFactory.objectDefinitionRegistry.registerObjectDefinition(commandName, objectDefinition);
+			controller.registerCommandForEventType(commandName, commandName, CoreMVCControllerObjectFactoryPostProcessor.DEFAULT_EXECUTE_METHOD_NAME);
 		}
 
 		public static function registerClass(objectFactory : IObjectFactory, id : String, clazz : Class, singleton : Boolean = false, isLazyInit : Boolean = true) : void {

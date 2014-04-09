@@ -38,7 +38,7 @@ package com.rockdot.library.view.component.example.scrolling.scrollbars {
 			addChild(slider1V);
 
 			return;
-
+			/*
 			// Slider2
 			var slider2H : Scrollbar2 = new Scrollbar2(Orientation.HORIZONTAL, 10, 300);
 			slider2H.x = slider1H.x;
@@ -99,6 +99,7 @@ package com.rockdot.library.view.component.example.scrolling.scrollbars {
 			slider6V.x = slider5V.x + slider5V.width + 20;
 			slider6V.y = slider5V.y;
 			addChild(slider6V);
+			*/
 		}
 
 

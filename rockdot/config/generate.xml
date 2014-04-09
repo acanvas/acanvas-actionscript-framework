@@ -28,7 +28,7 @@
 			<then>
 				<!-- Copy Global Configuration -->
 				<copy todir="${project.dir}/config" overwrite="true">
-					<fileset dir="config/templates/projects/${template}/config" excludes="project.properties,accounts.properties,includes.xml" />
+					<fileset dir="config/templates/projects/${template}/config" excludes="public.properties,private.properties,includes.xml" />
 				</copy>
 				<!-- Copy Global includes.xml -->
 				<copy todir="${project.dir}/config" preservelastmodified="false">
@@ -39,11 +39,11 @@
 				</copy>
 				<!-- Copy and prepare Project Configuration -->
 				<antcall target="_copy">
-					<param name="file" value="config/templates/projects/${template}/config/project.properties" />
+					<param name="file" value="config/templates/projects/${template}/config/public.properties" />
 					<param name="target.name" value="project" />
 				</antcall>
 				<antcall target="_copy">
-					<param name="file" value="config/templates/projects/${template}/config/accounts.properties" />
+					<param name="file" value="config/templates/projects/${template}/config/private.properties" />
 					<param name="target.name" value="accounts" />
 				</antcall>
 			</then>
@@ -54,8 +54,8 @@
 		<if>
 			<available file="${file}" />
 			<then>
-				<copy tofile="${project.dir}/config/${target.name}.local.properties" file="${file}" overwrite="true" />
-				<copy tofile="${project.dir}/config/${target.name}.live.properties" file="${file}" overwrite="true" />
+				<copy tofile="${project.dir}/config/local/${target.name}.properties" file="${file}" overwrite="true" />
+				<copy tofile="${project.dir}/config/live/${target.name}.properties" file="${file}" overwrite="true" />
 			</then>
 			<else>
 				<echo>${file} not existing. Skipping.</echo>
@@ -299,8 +299,8 @@
 	<filterset id="copyfilterset">
 		<filter token="project.dir" value="${project.dir}" />
 		<filtersfile file="${basedir}/config/ant/global.properties" />
-		<filtersfile file="${basedir}/config/templates/projects/project-facebook/config/project.properties" />
-		<filtersfile file="${basedir}/config/templates/projects/project-facebook/config/accounts.properties" />
+		<filtersfile file="${basedir}/config/templates/projects/project-facebook/config/public.properties" />
+		<filtersfile file="${basedir}/config/templates/projects/project-facebook/config/private.properties" />
 		<filtersfile file="${basedir}/config/templates/platforms/html/html.properties" />
 		<filtersfile file="${basedir}/config/ant/swf-build/swf.properties" />
 	</filterset>

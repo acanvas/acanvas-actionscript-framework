@@ -177,6 +177,15 @@ package com.rockdot.core.model {
 		}
 		
 		/**
+		 *  Direct access to APP_DATA FlashParam
+		 */
+		public static function get APP_DATA() : String {
+			//retrieve URLVariable ("app_data")
+			return RockdotConstants.getInstance()._loaderInfo.parameters.app_data as String;
+		}
+		
+		/**
+		 *  Reads keys from base64 encoded string in APP_DATA FlashVar
 		 *  mostly set if there's an initial deeplink (which can't be set as Anchor via Facebook's Frame) 
 		 */
 		public static function URLVAR(key : String) : String {
@@ -199,6 +208,8 @@ package com.rockdot.core.model {
 			//return value for key
 			return app_data[key];
 		}
+
+		
 		
 		/**
 		 *  Debug mode switch. Enables/Disables Logger.
