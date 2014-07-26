@@ -40,11 +40,11 @@
 				<!-- Copy and prepare Project Configuration -->
 				<antcall target="_copy">
 					<param name="file" value="config/templates/projects/${template}/config/public.properties" />
-					<param name="target.name" value="project" />
+					<param name="target.name" value="public" />
 				</antcall>
 				<antcall target="_copy">
 					<param name="file" value="config/templates/projects/${template}/config/private.properties" />
-					<param name="target.name" value="accounts" />
+					<param name="target.name" value="private" />
 				</antcall>
 			</then>
 		</if>
@@ -334,5 +334,59 @@
 				<unzip src="${basedir}/bin/zend.zip" dest="${project.dir}/target/server/library" />
 			</else>
 		</if>
+	</target>
+
+
+	<!-- ######################################
+			TEST CONVERT TO DART
+		###################################### -->
+	<target name="_convert_to_dart" description="">
+		<!--		
+		<property name="source_basedir" value="/Volumes/Daten/nilsdoehring/Documents/workspace-rockdot/nikon/source/flash"/>
+		-->
+		<property name="source_basedir" value="${basedir}/source/flash/lib"/>
+		<property name="source" value="${source_basedir}/org/as3commons"/>
+		<property name="template" value="${basedir}/config/dart_test/template"/>
+		<property name="library" value="ascommons_autogen"/>
+		<property name="target" value="/Volumes/Daten/nilsdoehring/Documents/workspace-dart/rockdart/lib/${library}"/>
+
+		<!-- compile conversion java class -->
+		<javac srcdir="${template}" destdir="${template}" />
+
+		<!-- copy template files to target library -->
+		<copy todir="${target}" encoding="UTF-8" preservelastmodified="true">
+			<fileset dir="${template}" includes="**/*" excludes="**/*.java, **/*.class" />
+			<filterset refid="copyfilterset" />
+			<filterset>
+				<filter token="library" value="${library}" />
+			</filterset>
+		</copy>
+		<move file="${target}/library.dart" tofile="${target}/${library}.dart"/>
+
+		<!-- perform conversion for each as3-file in source directory -->
+		<for param="as3file">
+			<path>
+				<fileset dir="${source}" includes="**/*.as" />
+			</path>
+			<sequential>
+
+				<java classname="DartConverter">
+					<!-- as3 file -->
+					<arg value="@{as3file}" />
+					<!-- base dir -->
+					<arg value="${source_basedir}" />
+					<!-- target dir -->
+					<arg value="${target}" />
+					<!-- target library name -->
+					<arg value="${library}" />
+					<classpath>
+						<pathelement path="${template}" />
+						<pathelement path="${java.class.path}" />
+					</classpath>
+				</java>
+
+			</sequential>
+		</for>
+
 	</target>
 </project>

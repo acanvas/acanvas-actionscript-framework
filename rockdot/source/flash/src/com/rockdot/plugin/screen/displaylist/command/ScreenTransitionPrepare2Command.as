@@ -17,7 +17,7 @@ package com.rockdot.plugin.screen.displaylist.command {
 
 	import flash.display.DisplayObject;
 
-	public class ScreenTransitionRunCommand extends AbstractScreenCommand {
+	public class ScreenTransitionPrepare2Command extends AbstractScreenCommand {
 		private var _vo : ScreenDisplaylistTransitionPrepareVO;
 
 		override public function execute(event : RockdotEvent = null) : * {

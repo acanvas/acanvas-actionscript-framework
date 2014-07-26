@@ -8,7 +8,7 @@ package com.rockdot.plugin.screen {
 	import com.rockdot.plugin.screen.displaylist.command.ScreenInitCommand;
 	import com.rockdot.plugin.screen.displaylist.command.ScreenSetCommand;
 	import com.rockdot.plugin.screen.displaylist.command.ScreenTransitionPrepareCommand;
-	import com.rockdot.plugin.screen.displaylist.command.ScreenTransitionRunCommand;
+	import com.rockdot.plugin.screen.displaylist.command.ScreenTransitionPrepare2Command;
 	import com.rockdot.plugin.screen.displaylist.command.event.ScreenDisplaylistEvents;
 	import com.rockdot.plugin.screen.displaylist.service.ScreenDisplaylistService;
 	import com.rockdot.plugin.state.command.event.StateEvents;
@@ -34,7 +34,7 @@ package com.rockdot.plugin.screen {
 			/* Commands */
 			var commandMap : Dictionary = new Dictionary();
 			commandMap[ ScreenDisplaylistEvents.SCREEN_INIT ] = ScreenInitCommand; 
-			commandMap[ ScreenDisplaylistEvents.TRANSITION_PREPARE ] = ScreenTransitionRunCommand; 
+			commandMap[ ScreenDisplaylistEvents.TRANSITION_PREPARE ] = ScreenTransitionPrepare2Command; 
 			commandMap[ ScreenDisplaylistEvents.APPEAR ] = ScreenAppearCommand; 
 			commandMap[ ScreenDisplaylistEvents.DISAPPEAR ] = ScreenDisappearCommand; 
 			commandMap[ ScreenDisplaylistEvents.TRANSITION_RUN ] = ScreenTransitionPrepareCommand; 

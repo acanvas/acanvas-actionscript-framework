@@ -22,9 +22,11 @@ package com.rockdot.plugin.io.command {
 			super.execute(event);
 
 			var vos : Array = event.data;
-			for (var i:int = 0; i<vos.length;i++){
-				_upload(vos[i], i == vos.length-1);
-			}
+				_upload(vos[0], false);
+				_upload(vos[1], true);
+//			for (var i:int = 0; i<vos.length;i++){
+//				_upload(vos[i], i == vos.length-1);
+//			}
 		}
 
 		private function _upload(vo : IOImageUploadVO, dispatch : Boolean) : void {
